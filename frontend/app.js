@@ -43,6 +43,7 @@ const uploads = [
   { name: 'Manual note', size: '2 KB', time: 'yesterday' },
 ]
 
+let uploadedData = []
 let activeSection = 'overview'
 
 const root = document.getElementById('app')
@@ -193,7 +194,8 @@ function renderSection(section) {
     case 'upload':
       return `
         <div class="stack">
-          <div class="dropzone" role="button" tabindex="0">
+          <input type="file" id="fileInput" accept=".csv,.json" style="display: none;" />
+          <div class="dropzone" id="dropzone" role="button" tabindex="0">
             <p class="muted">Drop CSV/JSON here or click to browse</p>
             <p class="small">Accepts watch heart-rate streams and symptom logs</p>
           </div>
@@ -215,6 +217,15 @@ function renderSection(section) {
               )
               .join('')}
           </div>
+          ${uploadedData.length > 0 ? `
+            <div class="card">
+              <h4>Uploaded Data Preview</h4>
+              <div style="max-height: 300px; overflow: auto;">
+                <pre style="font-size: 12px;">${JSON.stringify(uploadedData.slice(0, 10), null, 2)}</pre>
+                ${uploadedData.length > 10 ? `<p class="muted small">Showing first 10 of ${uploadedData.length} records</p>` : ''}
+              </div>
+            </div>
+          ` : ''}
         </div>
       `
     case 'insights':
@@ -265,6 +276,110 @@ function attachTabHandlers() {
       }
     })
   })
+  attachUploadHandlers()
+}
+
+function attachUploadHandlers() {
+  const dropzone = document.getElementById('dropzone')
+  const fileInput = document.getElementById('fileInput')
+
+  if (!dropzone || !fileInput) return
+
+  // Click to browse
+  dropzone.addEventListener('click', () => {
+    fileInput.click()
+  })
+
+  // File input change
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files?.[0]
+    if (file) handleFileUpload(file)
+  })
+
+  // Drag and drop
+  dropzone.addEventListener('dragover', (e) => {
+    e.preventDefault()
+    dropzone.style.background = '#f0f0f0'
+  })
+
+  dropzone.addEventListener('dragleave', () => {
+    dropzone.style.background = ''
+  })
+
+  dropzone.addEventListener('drop', (e) => {
+    e.preventDefault()
+    dropzone.style.background = ''
+    const file = e.dataTransfer?.files?.[0]
+    if (file) handleFileUpload(file)
+  })
+}
+
+function handleFileUpload(file) {
+  const fileName = file.name
+  const fileSize = formatFileSize(file.size)
+  const fileType = fileName.split('.').pop()?.toLowerCase()
+
+  if (!['csv', 'json'].includes(fileType)) {
+    alert('Please upload a CSV or JSON file')
+    return
+  }
+
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    const content = e.target?.result
+    if (typeof content === 'string') {
+      try {
+        if (fileType === 'json') {
+          uploadedData = parseJSON(content)
+        } else if (fileType === 'csv') {
+          uploadedData = parseCSV(content)
+        }
+
+        // Add to uploads list
+        uploads.unshift({
+          name: fileName,
+          size: fileSize,
+          time: 'just now'
+        })
+
+        render()
+        alert(`Successfully uploaded ${uploadedData.length} records from ${fileName}`)
+      } catch (err) {
+        alert(`Error parsing file: ${err.message}`)
+      }
+    }
+  }
+  reader.readAsText(file)
+}
+
+function parseJSON(content) {
+  const data = JSON.parse(content)
+  return Array.isArray(data) ? data : [data]
+}
+
+function parseCSV(content) {
+  const lines = content.trim().split('\n')
+  if (lines.length === 0) return []
+
+  const headers = lines[0].split(',').map(h => h.trim())
+  const rows = []
+
+  for (let i = 1; i < lines.length; i++) {
+    const values = lines[i].split(',').map(v => v.trim())
+    const row = {}
+    headers.forEach((header, idx) => {
+      row[header] = values[idx] || ''
+    })
+    rows.push(row)
+  }
+
+  return rows
+}
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' B'
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
 }
 
 render()
