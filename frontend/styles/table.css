@@ -1,0 +1,52 @@
+/* Table styles - Data tables and grid layouts */
+
+.table {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.table-head,
+.table-row {
+  display: grid;
+  grid-template-columns: 1.6fr 1.2fr 1fr 1fr 0.8fr;
+  padding: 12px 14px;
+  align-items: center;
+  gap: 8px;
+}
+
+.table-head {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.table-row:nth-child(even) {
+  background: #f8fafc;
+}
+
+.status {
+  text-transform: capitalize;
+  font-weight: 700;
+}
+
+.status.stable {
+  color: #16a34a;
+}
+
+.status.watch {
+  color: #ca8a04;
+}
+
+.status.alert {
+  color: #dc2626;
+}
+
+@media (max-width: 900px) {
+  .table-head,
+  .table-row {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, auto);
+  }
+}

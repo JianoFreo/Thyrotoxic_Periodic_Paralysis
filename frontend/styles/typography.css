@@ -1,0 +1,10 @@
+/* Typography styles - Text formatting and utilities */
+
+.muted {
+  color: #475569;
+  margin: 4px 0 0;
+}
+
+.small {
+  font-size: 14px;
+}
