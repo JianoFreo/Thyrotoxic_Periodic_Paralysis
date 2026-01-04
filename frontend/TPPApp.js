@@ -1,14 +1,14 @@
 // Main App Class - Orchestrates everything
 class TPPApp {
   constructor(rootElement) {
-    this.root = rootElement
+    this.root = rootElement //this = javascript, self = python
     this.activeSection = 'overview'
     this.dataManager = new DataManager()
     this.renderer = new Renderer(this.dataManager)
     this.fileUploader = new FileUploader(this.dataManager)
   }
 
-  attachTabHandlers() {
+  attachTabHandlers() { // These are the methods that make the buttons work
     const buttons = this.root.querySelectorAll('[data-section]')
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -26,12 +26,12 @@ class TPPApp {
     })
   }
 
-  render() {
+  render() { // This method draws the page based on the active section
     this.renderer.render(this.root, this.activeSection)
     this.attachTabHandlers()
   }
 
-  init() {
+  init() { // This method starts the app, it calls render to draw the initial page
     this.render()
   }
 }
