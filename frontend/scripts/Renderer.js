@@ -35,30 +35,39 @@ class Renderer {
           </div>
         `
       case 'monitoring':
+        const patients = this.dataManager.getPatients()
         return `
           <div class="stack">
-            <div class="table">
-              <div class="table-head">
-                <span>Patient</span>
-                <span>Device</span>
-                <span>Status</span>
-                <span>Last sync</span>
-                <span>HR</span>
+            ${patients.length > 0 ? `
+              <div class="table">
+                <div class="table-head">
+                  <span>Patient</span>
+                  <span>Device</span>
+                  <span>Status</span>
+                  <span>Last sync</span>
+                  <span>HR</span>
+                </div>
+                ${patients
+                  .map(
+                    (p) => `
+                      <div class="table-row">
+                        <span>${p.name}</span>
+                        <span class="muted">${p.device}</span>
+                        <span class="status ${p.status}">${p.status}</span>
+                        <span class="muted">${p.lastSync}</span>
+                        <span>${p.hr} bpm</span>
+                      </div>
+                    `,
+                  )
+                  .join('')}
               </div>
-              ${this.dataManager.getPatients()
-                .map(
-                  (p) => `
-                    <div class="table-row">
-                      <span>${p.name}</span>
-                      <span class="muted">${p.device}</span>
-                      <span class="status ${p.status}">${p.status}</span>
-                      <span class="muted">${p.lastSync}</span>
-                      <span>${p.hr} bpm</span>
-                    </div>
-                  `,
-                )
-                .join('')}
-            </div>
+            ` : `
+              <div class="empty-state">
+                <h3>No Monitoring Data</h3>
+                <p class="muted">Upload smartwatch data to start monitoring patient vitals</p>
+                <p class="small muted">Go to Data Upload to get started</p>
+              </div>
+            `}
             <div class="card">
               <h4>Simple heuristic</h4>
               <p class="muted small">
@@ -77,24 +86,31 @@ class Renderer {
               <p class="muted">Drop CSV/JSON here or click to browse</p>
               <p class="small">Accepts watch heart-rate streams and symptom logs</p>
             </div>
-            <div class="table">
-              <div class="table-head">
-                <span>File</span>
-                <span>Size</span>
-                <span>When</span>
+            ${this.dataManager.getUploads().length > 0 ? `
+              <div class="table">
+                <div class="table-head">
+                  <span>File</span>
+                  <span>Size</span>
+                  <span>When</span>
+                </div>
+                ${this.dataManager.getUploads()
+                  .map(
+                    (file) => `
+                      <div class="table-row">
+                        <span>${file.name}</span>
+                        <span class="muted">${file.size}</span>
+                        <span class="muted">${file.time}</span>
+                      </div>
+                    `,
+                  )
+                  .join('')}
               </div>
-              ${this.dataManager.getUploads()
-                .map(
-                  (file) => `
-                    <div class="table-row">
-                      <span>${file.name}</span>
-                      <span class="muted">${file.size}</span>
-                      <span class="muted">${file.time}</span>
-                    </div>
-                  `,
-                )
-                .join('')}
-            </div>
+            ` : `
+              <div class="empty-state">
+                <h3>No Files Uploaded Yet</h3>
+                <p class="muted">Upload your first CSV or JSON file to begin tracking</p>
+              </div>
+            `}
             ${uploadedData.length > 0 ? `
               <div class="card">
                 <h4>Uploaded Data Preview</h4>
@@ -192,21 +208,28 @@ class Renderer {
               <h2>${sectionTitle}</h2>
               <span class="badge">Sample data only</span>
             </div>
-            <ul class="list">
-              ${this.dataManager.getReadings()
-                .map(
-                  (item) => `
-                    <li class="list-row">
-                      <div>
-                        <p class="label">${item.label}</p>
-                        <p class="value">${item.value}</p>
-                      </div>
-                      ${item.change ? `<span class="pill">${item.change}</span>` : ''}
-                    </li>
-                  `,
-                )
-                .join('')}
-            </ul>
+            ${this.dataManager.getReadings().length > 0 && this.dataManager.getReadings()[0].value !== '0' ? `
+              <ul class="list">
+                ${this.dataManager.getReadings()
+                  .map(
+                    (item) => `
+                      <li class="list-row">
+                        <div>
+                          <p class="label">${item.label}</p>
+                          <p class="value">${item.value}</p>
+                        </div>
+                        ${item.change ? `<span class="pill">${item.change}</span>` : ''}
+                      </li>
+                    `,
+                  )
+                  .join('')}
+              </ul>
+            ` : `
+              <div class="empty-state">
+                <p class="muted">No signals yet</p>
+                <p class="small">Upload data to see vital statistics</p>
+              </div>
+            `}
             <div class="card">
               <p class="muted small">
                 connect the watch ingestion endpoint here.

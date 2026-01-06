@@ -35,4 +35,17 @@
   .layout {
     grid-template-columns: 1fr;
   }
+
+  .page {
+    padding: 24px 16px;
+    gap: 16px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .grid.two {
+    grid-template-columns: 1fr;
+  }
 }

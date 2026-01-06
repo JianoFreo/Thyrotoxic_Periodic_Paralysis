@@ -24,3 +24,27 @@
   background: #ffffff;
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
 }
+
+/* Mobile responsive navigation */
+@media (max-width: 768px) {
+  .tabs {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .tab {
+    flex: 1;
+    min-width: 100px;
+    padding: 12px 10px;
+    font-size: 14px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .tab {
+    padding: 10px 8px;
+    font-size: 13px;
+    min-width: 80px;
+  }
+}

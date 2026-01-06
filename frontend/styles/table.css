@@ -50,3 +50,38 @@
     grid-template-rows: repeat(3, auto);
   }
 }
+
+@media (max-width: 768px) {
+  .table {
+    border-radius: 12px;
+  }
+  
+  .table-head,
+  .table-row {
+    padding: 10px 12px;
+    font-size: 14px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .table-head,
+  .table-row {
+    grid-template-columns: 1fr;
+    padding: 12px;
+    gap: 8px;
+  }
+  
+  .table-head {
+    display: none; /* Hide header on mobile, show labels inline */
+  }
+  
+  .table-row {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 16px 12px;
+  }
+  
+  .table-row:last-child {
+    border-bottom: none;
+  }
+}
