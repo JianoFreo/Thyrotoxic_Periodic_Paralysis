@@ -1,0 +1,86 @@
+[
+  {
+    "timestamp": "2026-01-07T08:00:00Z",
+    "heartRate": "72",
+    "hrv": "58",
+    "activity": "resting",
+    "device": "Apple Watch Series 9"
+  },
+  {
+    "timestamp": "2026-01-07T08:15:00Z",
+    "heartRate": "75",
+    "hrv": "55",
+    "activity": "walking",
+    "device": "Apple Watch Series 9"
+  },
+  {
+    "timestamp": "2026-01-07T08:30:00Z",
+    "heartRate": "68",
+    "hrv": "60",
+    "activity": "resting",
+    "device": "Apple Watch Series 9"
+  },
+  {
+    "timestamp": "2026-01-07T09:00:00Z",
+    "heartRate": "98",
+    "hrv": "42",
+    "activity": "exercise",
+    "device": "Apple Watch Series 9"
+  },
+  {
+    "timestamp": "2026-01-07T09:30:00Z",
+    "heartRate": "115",
+    "hrv": "35",
+    "activity": "exercise",
+    "device": "Apple Watch Series 9"
+  },
+  {
+    "timestamp": "2026-01-07T10:00:00Z",
+    "heartRate": "78",
+    "hrv": "52",
+    "activity": "resting",
+    "device": "Apple Watch Series 9"
+  },
+  {
+    "timestamp": "2026-01-07T10:30:00Z",
+    "heartRate": "71",
+    "hrv": "58",
+    "activity": "resting",
+    "device": "Apple Watch Series 9"
+  },
+  {
+    "timestamp": "2026-01-07T11:00:00Z",
+    "heartRate": "85",
+    "hrv": "48",
+    "activity": "walking",
+    "device": "Apple Watch Series 9"
+  },
+  {
+    "timestamp": "2026-01-07T12:00:00Z",
+    "heartRate": "73",
+    "hrv": "56",
+    "activity": "resting",
+    "device": "Apple Watch Series 9"
+  },
+  {
+    "timestamp": "2026-01-07T13:00:00Z",
+    "heartRate": "105",
+    "hrv": "38",
+    "activity": "exercise",
+    "device": "Apple Watch Series 9"
+  },
+  {
+    "timestamp": "2026-01-07T14:00:00Z",
+    "heartRate": "76",
+    "hrv": "54",
+    "activity": "resting",
+    "device": "Apple Watch Series 9"
+  },
+  {
+    "timestamp": "2026-01-07T15:00:00Z",
+    "heartRate": "82",
+    "hrv": "50",
+    "activity": "walking",
+    "device": "Apple Watch Series 9"
+  }
+]
