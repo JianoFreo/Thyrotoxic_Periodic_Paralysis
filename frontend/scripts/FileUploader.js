@@ -2,30 +2,7 @@
 class FileUploader {
   constructor(dataManager) {
     this.dataManager = dataManager
-  }
-
-  parseJSON(content) {
-    const data = JSON.parse(content)
-    return Array.isArray(data) ? data : [data]
-  }
-
-  parseCSV(content) {
-    const lines = content.trim().split('\n')
-    if (lines.length === 0) return []
-
-    const headers = lines[0].split(',').map(h => h.trim())
-    const rows = []
-
-    for (let i = 1; i < lines.length; i++) {
-      const values = lines[i].split(',').map(v => v.trim())
-      const row = {}
-      headers.forEach((header, idx) => {
-        row[header] = values[idx] || ''
-      })
-      rows.push(row)
-    }
-
-    return rows
+    this.backendURL = 'http://localhost:3000'
   }
 
   formatFileSize(bytes) {
@@ -34,7 +11,7 @@ class FileUploader {
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
   }
 
-  handleFileUpload(file, onSuccess) {
+  async handleFileUpload(file, onSuccess, onError) {
     const fileName = file.name
     const fileSize = this.formatFileSize(file.size)
     const fileType = fileName.split('.').pop()?.toLowerCase()
@@ -44,28 +21,33 @@ class FileUploader {
       return
     }
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const content = e.target?.result
-      if (typeof content === 'string') {
-        try {
-          let parsedData
-          if (fileType === 'json') {
-            parsedData = this.parseJSON(content)
-          } else if (fileType === 'csv') {
-            parsedData = this.parseCSV(content)
-          }
+    try {
+      // Send file to backend
+      const formData = new FormData()
+      formData.append('file', file)
 
-          this.dataManager.setUploadedData(parsedData)
-          this.dataManager.addUpload({ name: fileName, size: fileSize, time: 'just now' })
+      const response = await fetch(`${this.backendURL}/api/ingest`, {
+        method: 'POST',
+        body: formData
+      })
 
-          onSuccess(parsedData.length, fileName)
-        } catch (err) {
-          alert(`Error parsing file: ${err.message}`)
-        }
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Upload failed')
       }
+
+      const result = await response.json()
+
+      // Update local state
+      this.dataManager.setUploadedData(result.preview || [])
+      this.dataManager.addUpload({ name: fileName, size: fileSize, time: 'just now' })
+
+      onSuccess(result.records, fileName)
+    } catch (err) {
+      console.error('Upload error:', err)
+      alert(`Error uploading file: ${err.message}`)
+      if (onError) onError(err)
     }
-    reader.readAsText(file)
   }
 
   attachHandlers(onFileUploaded) {
