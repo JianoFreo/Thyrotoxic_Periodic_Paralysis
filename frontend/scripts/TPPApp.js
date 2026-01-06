@@ -23,7 +23,6 @@ class TPPApp {
     this.fileUploader.attachHandlers(async (count, fileName) => {
       await this.dataManager.fetchDataFromBackend()
       this.render()
-      alert(`Successfully uploaded ${count} records from ${fileName}`)
     })
   }
 

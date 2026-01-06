@@ -17,11 +17,14 @@ class FileUploader {
     const fileType = fileName.split('.').pop()?.toLowerCase()
 
     if (!['csv', 'json'].includes(fileType)) {
-      alert('Please upload a CSV or JSON file')
+      UIHelper.showToast('Please upload a CSV or JSON file', 'error')
       return
     }
 
     try {
+      UIHelper.showLoading('Uploading file...')
+      UIHelper.setDropzoneState(true)
+
       // Send file to backend
       const formData = new FormData()
       formData.append('file', file)
@@ -42,10 +45,16 @@ class FileUploader {
       this.dataManager.setUploadedData(result.preview || [])
       this.dataManager.addUpload({ name: fileName, size: fileSize, time: 'just now' })
 
+      UIHelper.hideLoading()
+      UIHelper.setDropzoneState(false)
+      UIHelper.showToast(`Successfully uploaded ${result.records} records`, 'success')
+
       onSuccess(result.records, fileName)
     } catch (err) {
       console.error('Upload error:', err)
-      alert(`Error uploading file: ${err.message}`)
+      UIHelper.hideLoading()
+      UIHelper.setDropzoneState(false)
+      UIHelper.showToast(`Upload failed: ${err.message}`, 'error', 5000)
       if (onError) onError(err)
     }
   }
