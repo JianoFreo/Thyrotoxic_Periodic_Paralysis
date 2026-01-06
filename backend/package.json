@@ -1,0 +1,19 @@
+{
+  "name": "tpp-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Thyrotoxic Periodic Paralysis monitoring",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["tpp", "health", "monitoring"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "multer": "^1.4.5-lts.1"
+  }
+}
