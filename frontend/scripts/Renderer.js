@@ -197,7 +197,7 @@ class Renderer {
           <section class="panel">
             <div class="panel-header">
               <h2>${sectionTitle}</h2>
-              <span class="badge">Sample data only</span>
+              <span class="badge"></span>
             </div>
             ${this.renderSection(activeSection)}
           </section>
@@ -206,7 +206,7 @@ class Renderer {
             <h3>Recent Signals</h3>
             <div class="panel-header">
               <h2>${sectionTitle}</h2>
-              <span class="badge">Sample data only</span>
+              <span class="badge"></span>
             </div>
             ${this.dataManager.getReadings().length > 0 && this.dataManager.getReadings()[0].value !== '0' ? `
               <ul class="list">
