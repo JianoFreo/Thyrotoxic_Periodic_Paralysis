@@ -3,3 +3,6 @@ notebook
 pandas
 matplotlib
 seaborn
+scipy
+requests
+numpy
