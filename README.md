@@ -2,9 +2,37 @@
 
 Full-stack application for Thyrotoxic Periodic Paralysis monitoring with smartwatch data ingestion.
 
-## Web Application
+## � Quick Start (Just Double-Click!)
 
-### Option 1: Using npm (recommended)
+**Windows:**
+```
+Double-click start.bat
+```
+
+**Or run in terminal:**
+```powershell
+.\start.bat
+```
+
+This opens two windows (backend + frontend). Close them when done.
+
+**URLs:**
+- Frontend: http://localhost:8080
+- Backend: http://localhost:3000
+
+---
+
+## Docker Option (If You Have Docker Desktop Running)
+
+```bash
+docker-compose up
+```
+
+[See DOCKER.md for details](DOCKER.md)
+
+---
+
+## Manual Start (For Developers)
 ```bash
 # Install dependencies
 npm run install:all
@@ -39,11 +67,11 @@ npx live-server --port=8080
 
 ## Project Structure
 ```
-├── notebooks/         # 📊 Jupyter notebooks for data analysis
+├── notebooks/         # Jupyter notebooks for data analysis
 │   ├── TPP-Analysis.ipynb
 │   ├── TPP-API-Integration.ipynb
 │   └── TPP-ML-demo.ipynb
-├── scripts/           # 🐍 Python CLI tools and utilities
+├── scripts/           #  Python CLI tools and utilities
 │   ├── analyze_data.py      # Data analysis CLI
 │   ├── upload_data.py       # API upload CLI
 │   ├── generate_data.py     # Synthetic data generator
