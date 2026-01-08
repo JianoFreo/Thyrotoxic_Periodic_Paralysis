@@ -6,3 +6,5 @@ seaborn
 scipy
 requests
 numpy
+scikit-learn
+plotly
