@@ -2,7 +2,7 @@
 
 Full-stack application for Thyrotoxic Periodic Paralysis monitoring with smartwatch data ingestion.
 
-## � Quick Start (Just Double-Click!)
+## Quick Start (Just Double-Click!)
 
 **Windows:**
 ```
