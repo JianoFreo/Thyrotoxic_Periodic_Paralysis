@@ -2,6 +2,7 @@
 
 Full-stack application for Thyrotoxic Periodic Paralysis monitoring with smartwatch data ingestion.
 
+## Web Application
 
 ### Option 1: Using npm (recommended)
 ```bash
@@ -38,10 +39,15 @@ npx live-server --port=8080
 
 ## Project Structure
 ```
-├── notebooks/         # Jupyter notebooks (primary interface)
-│   ├── TPP-ML-demo.ipynb
+├── notebooks/         # 📊 Jupyter notebooks for data analysis
 │   ├── TPP-Analysis.ipynb
-│   └── TPP-API-Integration.ipynb
+│   ├── TPP-API-Integration.ipynb
+│   └── TPP-ML-demo.ipynb
+├── scripts/           # 🐍 Python CLI tools and utilities
+│   ├── analyze_data.py      # Data analysis CLI
+│   ├── upload_data.py       # API upload CLI
+│   ├── generate_data.py     # Synthetic data generator
+│   └── tpp_utils.py         # Shared utilities module
 ├── frontend/          # Vanilla JS frontend
 │   ├── scripts/       # JS classes (OOP)
 │   ├── styles/        # Modular CSS
@@ -51,6 +57,6 @@ npx live-server --port=8080
 │   ├── data/          # Uploaded data storage
 │   └── package.json
 ├── sample-data/       # Test data for notebooks and uploads
-├── requirements.txt   # Python dependencies for Jupyter
+├── requirements.txt   # Python dependencies
 └── package.json       # Root scripts
 ```
