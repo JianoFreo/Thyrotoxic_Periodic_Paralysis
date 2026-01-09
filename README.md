@@ -1,6 +1,6 @@
 # TPP Monitoring System
 
-Full-stack application for Thyrotoxic Periodic Paralysis monitoring with smartwatch data ingestion.
+Full-stack AI deeplearning software for Thyrotoxic Periodic Paralysis monitoring with smartwatch data ingestion.
 
 ## Quick Start (Just Double-Click!)
 
