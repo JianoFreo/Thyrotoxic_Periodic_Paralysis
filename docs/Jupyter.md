@@ -23,4 +23,4 @@ jupyter lab
 
 Notes:
 - If your Python environment already has packages (pandas/matplotlib), you can skip reinstalling.
-- The demo is minimal—feel free to extend it with sklearn or other ML libraries as needed.
+- The demo is minimal, feel free to extend it with sklearn or other ML libraries as needed.
