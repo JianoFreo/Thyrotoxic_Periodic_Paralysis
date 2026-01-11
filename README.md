@@ -1,6 +1,6 @@
-# TPP Monitoring System
+# TPP Hyphertyrodism AI Data System
 
-Full-stack AI deeplearning software for Thyrotoxic Periodic Paralysis monitoring with smartwatch data ingestion.
+Full-stack AI deeplearning software for Thyrotoxic Periodic Paralysis monitoring with smartwatch data ingestion. This is to monitor the behavior of your body that predicts the severity and timeline of TTP attacks. It also advises you when to take your Propranolol and Thiamazole tablets and how you would prepare for the attack.
 
 ## Quick Start (Just Double-Click!)
 
@@ -60,31 +60,3 @@ cd frontend
 npx live-server --port=8080
 ```
 
-## URLs
-- Frontend: http://localhost:8080
-- Backend API: http://localhost:3000
-- Health Check: http://localhost:3000/health
-
-## Project Structure
-```
-├── notebooks/         # Jupyter notebooks for data analysis
-│   ├── TPP-Analysis.ipynb
-│   ├── TPP-API-Integration.ipynb
-│   └── TPP-ML-demo.ipynb
-├── scripts/           #  Python CLI tools and utilities
-│   ├── analyze_data.py      # Data analysis CLI
-│   ├── upload_data.py       # API upload CLI
-│   ├── generate_data.py     # Synthetic data generator
-│   └── tpp_utils.py         # Shared utilities module
-├── frontend/          # Vanilla JS frontend
-│   ├── scripts/       # JS classes (OOP)
-│   ├── styles/        # Modular CSS
-│   └── index.html
-├── backend/           # Node + Express API
-│   ├── server.js      # Main server
-│   ├── data/          # Uploaded data storage
-│   └── package.json
-├── sample-data/       # Test data for notebooks and uploads
-├── requirements.txt   # Python dependencies
-└── package.json       # Root scripts
-```
