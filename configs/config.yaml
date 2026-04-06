@@ -1,0 +1,28 @@
+project:
+  name: wearable-health-monitoring
+
+paths:
+  raw_data: data/raw
+  processed_data: data/processed
+  models: models
+  logs: logs
+
+data:
+  time_column: timestamp
+  target_column: event_severity
+  wearable_signals:
+    - heart_rate
+    - activity_level
+    - sleep_duration
+    - skin_temperature
+
+model:
+  task_type: classification
+  artifact_name: trained_model.pkl
+
+training:
+  processed_data_file: data/processed/training_data.csv
+  validation_fraction: 0.2
+  metrics_file: training_metrics.json
+  test_size: 0.2
+  random_seed: 42

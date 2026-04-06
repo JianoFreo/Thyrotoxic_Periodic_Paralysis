@@ -1,0 +1,42 @@
+[
+  {
+    "timestamp": "2026-01-06T23:00:00Z",
+    "heartRate": 62,
+    "hrv": 65,
+    "activity": "sleeping",
+    "device": "Fitbit Sense 2",
+    "temperature": 36.5
+  },
+  {
+    "timestamp": "2026-01-07T00:00:00Z",
+    "heartRate": 58,
+    "hrv": 68,
+    "activity": "sleeping",
+    "device": "Fitbit Sense 2",
+    "temperature": 36.4
+  },
+  {
+    "timestamp": "2026-01-07T01:00:00Z",
+    "heartRate": 60,
+    "hrv": 66,
+    "activity": "sleeping",
+    "device": "Fitbit Sense 2",
+    "temperature": 36.3
+  },
+  {
+    "timestamp": "2026-01-07T06:00:00Z",
+    "heartRate": 65,
+    "hrv": 62,
+    "activity": "awake",
+    "device": "Fitbit Sense 2",
+    "temperature": 36.6
+  },
+  {
+    "timestamp": "2026-01-07T07:00:00Z",
+    "heartRate": 70,
+    "hrv": 58,
+    "activity": "morning routine",
+    "device": "Fitbit Sense 2",
+    "temperature": 36.7
+  }
+]
