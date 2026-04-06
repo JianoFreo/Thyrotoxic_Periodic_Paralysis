@@ -11,7 +11,8 @@
 
 # MANUAL INPUT FOR TESTING
 <img width="1611" height="632" alt="image" src="https://github.com/user-attachments/assets/436276e8-2667-42e6-adfe-9b0c35ecaaf5" />
-![alt text](image-1.png)
+<img width="649" height="834" alt="image" src="https://github.com/user-attachments/assets/d6ee2330-53c9-455a-b3d0-67921cc9c8a0" />
+
 
 ## Architecture
 
