@@ -1,6 +1,8 @@
 # TPP Monitoring Service 
 
-![alt text](<Screenshot 2026-04-07 002954.png>)
+Full-stack AI deeplearning software for Thyrotoxic Periodic Paralysis monitoring with smartwatch data ingestion. This is to monitor the behavior of your body that predicts the severity and timeline of TPP attacks. It also advises you when to take your Propranolol and Thiamazole tablets and how you would prepare for the attack. It was initially designed for me as I suffered from sa same condition back in early 2024 but as of 2025, I already fully recovered so I didn't get to use it LMAO, still working on it tho.
+
+![alt text](<assests/Screenshot 2026-04-07 002954.png>)
 
 - Flask API service
 - Streamlit interactive frontend
@@ -10,9 +12,8 @@
 
 
 # MANUAL INPUT FOR TESTING
-<img width="1611" height="632" alt="image" src="https://github.com/user-attachments/assets/436276e8-2667-42e6-adfe-9b0c35ecaaf5" />
-<img width="649" height="834" alt="image" src="https://github.com/user-attachments/assets/d6ee2330-53c9-455a-b3d0-67921cc9c8a0" />
-
+![alt text](assests/image.png)
+![alt text](assests/image-1.png)
 
 ## Architecture
 
