@@ -12,15 +12,41 @@ from service import TPPService
 
 
 def render(user_id: str):
-    st.header("📊 Enter Vitals")
-    
     st.markdown(
         """
-        Input your physiological metrics here. The system will compute your TPP risk 
-        immediately.
-        """
+        <style>
+            .vitals-shell {
+                background: linear-gradient(180deg, #d7e9ff 0%, #eaf3ff 100%);
+                border-radius: 18px;
+                border: 1px solid #cadcf6;
+                padding: 1.2rem 1.3rem;
+            }
+            .vitals-card {
+                background: #f9fcff;
+                border: 1px solid #d9e7fa;
+                border-radius: 14px;
+                padding: 0.9rem 1rem;
+                margin-bottom: 0.8rem;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
     )
-    
+
+    st.markdown('<div class="vitals-shell">', unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="vitals-card">
+            <div style="font-size:0.78rem; letter-spacing:0.14em; color:#2b79d1; font-weight:700;">VITALS CAPTURE</div>
+            <div style="font-size:1.9rem; color:#162639; font-weight:800; margin-top:0.2rem;">Enter Physiological Signals</div>
+            <div style="color:#5d6d80; margin-top:0.2rem;">Provide the latest biometrics to generate a model-assisted TPP risk estimate.</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown('<div class="vitals-card">', unsafe_allow_html=True)
+    st.markdown("### Manual Input")
     col1, col2 = st.columns(2)
     
     with col1:
@@ -62,10 +88,12 @@ def render(user_id: str):
             step=30,
         )
         is_sleeping = st.checkbox("Currently sleeping?", value=False)
-    
-    st.divider()
-    
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
     # Prediction button
+    st.markdown('<div class="vitals-card">', unsafe_allow_html=True)
+    st.markdown("### Risk Inference")
     if st.button("Generate Prediction", key="predict_btn", use_container_width=True):
         with st.spinner("Computing TPP risk..."):
             vitals = VitalsInput(
@@ -80,12 +108,12 @@ def render(user_id: str):
             )
             
             pred = TPPService.predict(vitals)
-            
+
             st.success(f"Prediction generated! (ID: {pred.prediction_id[:8]}...)")
-            
+
             # Display result
             col1, col2, col3, col4 = st.columns(4)
-            
+
             with col1:
                 st.metric("Risk Score", f"{pred.risk_score:.1%}")
             with col2:
@@ -100,46 +128,46 @@ def render(user_id: str):
                 st.metric("Timeline", pred.predicted_timeline or "N/A")
             with col4:
                 st.metric("Processing", f"{pred.processing_time_ms}ms")
-            
+
             st.info(f"**Recommendation:** {pred.recommendation}")
-    
-    st.divider()
-    
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
     # Demo data
-    if st.button("Load Demo (High Risk)", key="demo_high"):
-        st.session_state["demo_high"] = True
-    
-    if st.button("Load Demo (Low Risk)", key="demo_low"):
-        st.session_state["demo_low"] = True
-    
-    if st.session_state.get("demo_high"):
-        st.info("Demo: High HR (150bpm), Low HRV (15ms), Low steps → High Risk")
-        vitals = VitalsInput(
-            user_id=user_id,
-            heart_rate=150,
-            hrv=15,
-            steps=2,
-            activity_intensity=8,
-            sleep_duration_mins=240,
-            is_sleeping=False,
-            source="demo",
-        )
-        pred = TPPService.predict(vitals)
-        st.success(f"✅ Prediction: {pred.severity_level.upper()} risk ({pred.risk_score:.1%})")
-        st.session_state["demo_high"] = False
-    
-    if st.session_state.get("demo_low"):
-        st.info("Demo: Normal HR (78bpm), Good HRV (50ms), Active → Low Risk")
-        vitals = VitalsInput(
-            user_id=user_id,
-            heart_rate=78,
-            hrv=50,
-            steps=150,
-            activity_intensity=2,
-            sleep_duration_mins=480,
-            is_sleeping=False,
-            source="demo",
-        )
-        pred = TPPService.predict(vitals)
-        st.success(f"✅ Prediction: {pred.severity_level.upper()} risk ({pred.risk_score:.1%})")
-        st.session_state["demo_low"] = False
+    st.markdown('<div class="vitals-card">', unsafe_allow_html=True)
+    st.markdown("### Quick Demo Scenarios")
+    demo_col1, demo_col2 = st.columns(2)
+    with demo_col1:
+        if st.button("Load Demo (High Risk)", key="load_demo_high", use_container_width=True):
+            st.info("Demo: High HR (150bpm), Low HRV (15ms), Low steps -> High Risk")
+            vitals = VitalsInput(
+                user_id=user_id,
+                heart_rate=150,
+                hrv=15,
+                steps=2,
+                activity_intensity=8,
+                sleep_duration_mins=240,
+                is_sleeping=False,
+                source="demo",
+            )
+            pred = TPPService.predict(vitals)
+            st.success(f"Prediction: {pred.severity_level.upper()} risk ({pred.risk_score:.1%})")
+
+    with demo_col2:
+        if st.button("Load Demo (Low Risk)", key="load_demo_low", use_container_width=True):
+            st.info("Demo: Normal HR (78bpm), Good HRV (50ms), Active -> Low Risk")
+            vitals = VitalsInput(
+                user_id=user_id,
+                heart_rate=78,
+                hrv=50,
+                steps=150,
+                activity_intensity=2,
+                sleep_duration_mins=480,
+                is_sleeping=False,
+                source="demo",
+            )
+            pred = TPPService.predict(vitals)
+            st.success(f"Prediction: {pred.severity_level.upper()} risk ({pred.risk_score:.1%})")
+
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)

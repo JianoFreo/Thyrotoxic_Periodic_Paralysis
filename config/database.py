@@ -2,7 +2,7 @@
 SQLite database connection manager for TPP.
 
 Provides thread-local connections and startup helpers.
-Uses WAL mode for concurrent read/write from Flask, Worker, and Streamlit.
+Uses WAL mode for concurrent read/write from Flask and Streamlit.
 """
 
 import os
@@ -67,6 +67,16 @@ def init_db():
         CREATE INDEX IF NOT EXISTS idx_input_created ON vitals_input(created_at);
         CREATE INDEX IF NOT EXISTS idx_pred_input    ON predictions(input_id);
         CREATE INDEX IF NOT EXISTS idx_pred_severity ON predictions(severity_level);
+
+        -- Backfill any previously written ISO timestamps with 'T' separator
+        -- to sqlite's expected 'YYYY-MM-DD HH:MM:SS' shape.
+        UPDATE vitals_input
+        SET created_at = REPLACE(SUBSTR(created_at, 1, 19), 'T', ' ')
+        WHERE INSTR(created_at, 'T') > 0;
+
+        UPDATE predictions
+        SET created_at = REPLACE(SUBSTR(created_at, 1, 19), 'T', ' ')
+        WHERE INSTR(created_at, 'T') > 0;
     """)
     conn.commit()
     print(f"[DB] SQLite database initialised at {DB_PATH}")

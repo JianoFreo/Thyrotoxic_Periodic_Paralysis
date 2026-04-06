@@ -35,7 +35,7 @@ class VitalsDAO:
             vitals.sleep_stage,
             vitals.is_sleeping,
             vitals.source,
-            datetime.utcnow().isoformat(),
+            datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
         ))
         conn.commit()
         return input_id
@@ -111,7 +111,7 @@ class PredictionDAO:
             pred.recommendation,
             pred.model_version,
             pred.processing_time_ms,
-            datetime.utcnow().isoformat(),
+            datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
         ))
         conn.commit()
         return prediction_id

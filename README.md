@@ -1,6 +1,6 @@
-# TPP Monitoring Service (OCR-Style Architecture)
+# TPP Monitoring Service 
 
-Full-stack Thyrotoxic Periodic Paralysis (TPP) prediction system rebuilt using the same architecture pattern as your OCR project:
+![alt text](<Screenshot 2026-04-07 002954.png>)
 
 - Flask API service
 - Streamlit interactive frontend
@@ -86,4 +86,3 @@ streamlit run streamlit_app.py --server.port 8501
 
 - The service attempts to load a trained artifact at `models/trained_model.pkl`.
 - If model loading fails, fallback risk logic is used so interactive testing always works.
-- The architecture is intentionally aligned with your OCR project for maintainability.

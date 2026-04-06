@@ -9,8 +9,7 @@ Layered architecture following OCR-1 pattern:
     config/   -> DB connection     (Infrastructure)
 
 Usage:
-    python app.py                 # API server only
-    python app.py --with-worker   # API + background worker (future)
+    python app.py
 
 Endpoints:
     POST /predict   — synchronous TPP risk prediction
