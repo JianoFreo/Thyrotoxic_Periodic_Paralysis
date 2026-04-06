@@ -1,62 +1,30 @@
 services:
-  database:
-    image: ${POSTGRES_IMAGE:-postgres:15-alpine}
+  web:
+    build: .
+    command: python app.py --port 5050
     ports:
-      - "5432:5432"
+      - "5050:5050"
     environment:
-      - POSTGRES_DB=tpp
-      - POSTGRES_USER=tpp
-      - POSTGRES_PASSWORD=tpp_dev_password
+      - DB_PATH=/app/data/tpp.db
+      - MODEL_PATH=/app/models/trained_model.pkl
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U tpp -d tpp"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
+      - tpp_data:/app/data
 
-  backend:
-    build: ./backend
+  streamlit:
+    build: .
+    command: >
+      streamlit run streamlit_app.py
+      --server.port 8501
+      --server.address 0.0.0.0
     ports:
-      - "3000:3000"
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
-      - ./backend/data:/app/data
+      - "8501:8501"
     environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://tpp:tpp_dev_password@database:5432/tpp
+      - DB_PATH=/app/data/tpp.db
+      - MODEL_PATH=/app/models/trained_model.pkl
+    volumes:
+      - tpp_data:/app/data
     depends_on:
-      database:
-        condition: service_healthy
-    restart: unless-stopped
-
-  frontend:
-    build: ./frontend
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    environment:
-      - VITE_API_TARGET=http://backend:3000
-    depends_on:
-      - backend
-    restart: unless-stopped
-
-  jupyter:
-    image: jupyter/scipy-notebook:latest
-    profiles:
-      - notebook
-    ports:
-      - "8888:8888"
-    volumes:
-      - ./notebooks:/home/jovyan/work/notebooks
-      - ./scripts:/home/jovyan/work/scripts
-      - ./requirements.txt:/home/jovyan/work/requirements.txt
-    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
-    restart: unless-stopped
+      - web
 
 volumes:
-  postgres_data:
+  tpp_data:
