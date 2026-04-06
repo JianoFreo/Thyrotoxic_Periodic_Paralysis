@@ -83,6 +83,11 @@ class BatchIngestRequest(BaseModel):
     allow_partial: bool = True
 
 
+class IngestRequest(BaseModel):
+    events: list[IngestionEvent] = Field(min_length=1, max_length=20000)
+    allow_partial: bool = True
+
+
 class IngestFailure(BaseModel):
     index: int
     reason: str
