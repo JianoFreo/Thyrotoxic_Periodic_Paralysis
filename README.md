@@ -6,6 +6,12 @@
 - Streamlit interactive frontend
 - DAO + Service + Model layered structure
 - SQLite persistence (shared by API and UI)
+#
+
+
+# MANUAL INPUT FOR TESTING
+![alt text](image.png)
+![alt text](image-1.png)
 
 ## Architecture
 

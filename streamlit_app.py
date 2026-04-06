@@ -53,14 +53,14 @@ st.markdown(
             overflow: hidden;
         }
         .stButton > button {
-            background: #2a6bf5;
-            color: #ffffff;
-            border: 1px solid #5f8fff;
+            background: rgba(165, 114, 255, 0.10);
+            color: #efe7ff;
+            border: 1px solid rgba(189, 148, 255, 0.38);
             border-radius: 10px;
         }
         .stButton > button:hover {
-            background: #3c79f6;
-            border-color: #7ca3ff;
+            background: rgba(165, 114, 255, 0.16);
+            border-color: rgba(204, 171, 255, 0.52);
         }
         .stNumberInput input,
         .stTextInput input,
