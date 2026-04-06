@@ -23,6 +23,78 @@ This opens two windows (backend + frontend). Close them when done.
 - Frontend: http://localhost:8080
 - Backend: http://localhost:3000
 
+## How To Use
+
+### 1. Install dependencies
+
+Python dependencies:
+
+```powershell
+C:/Program Files/Python314/python.exe -m pip install -r requirements.txt
+```
+
+Node dependencies:
+
+```bash
+npm run install:all
+```
+
+### 2. Prepare training data
+
+The default training input file is:
+
+- data/processed/training_data.csv
+
+You can replace this file with your own processed smartwatch dataset.
+
+### 3. Train the model
+
+```powershell
+C:/Program Files/Python314/python.exe scripts/train.py --config configs/config.yaml
+```
+
+Outputs:
+
+- models/trained_model.pkl
+- logs/training_metrics.json
+
+### 4. Run batch prediction
+
+```powershell
+C:/Program Files/Python314/python.exe scripts/predict.py --data data/processed/training_data.csv --artifact models/trained_model.pkl --out data/processed/predictions.csv
+```
+
+Output:
+
+- data/processed/predictions.csv
+
+### 5. Run tests
+
+```powershell
+C:/Program Files/Python314/python.exe -m pytest tests -q
+```
+
+### 6. Run full app (frontend + Node backend)
+
+```bash
+npm start
+```
+
+URLs:
+
+- Frontend dashboard: http://localhost:8080
+- Backend API: http://localhost:3000
+
+### 7. Optional: Run FastAPI API (ingestion and prediction)
+
+```powershell
+C:/Program Files/Python314/python.exe -m uvicorn src.ingestion_api.main:app --reload --port 8000
+```
+
+API docs:
+
+- http://localhost:8000/docs
+
 ---
 
 ## Docker Option (If You Have Docker Desktop Running)
