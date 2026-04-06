@@ -123,6 +123,7 @@ def render(user_id: str):
                 if pred:
                     records.append(
                         {
+                            "Input ID": vitals.input_id,
                             "Created": vitals.created_at,
                             "HR": vitals.heart_rate,
                             "HRV": vitals.hrv,
@@ -137,8 +138,28 @@ def render(user_id: str):
                 st.warning("No completed predictions in history yet.")
                 return
 
+            delete_options = [
+                f"{row['Created']} | {row['Severity']} | {row['Risk']} | {row['Input ID'][:8]}"
+                for row in records
+            ]
+            selected_label = st.selectbox(
+                "Select a record to delete",
+                options=delete_options,
+                key="history_delete_select",
+            )
+
+            if st.button("Delete Selected Record", key="delete_history_record", use_container_width=True):
+                selected_index = delete_options.index(selected_label)
+                selected_input_id = records[selected_index]["Input ID"]
+                deleted = TPPService.delete_history_record(selected_input_id)
+                if deleted:
+                    st.success("Record deleted.")
+                    st.rerun()
+                else:
+                    st.warning("Could not delete record. It may have already been removed.")
+
             df = pd.DataFrame(records)
-            st.dataframe(df, use_container_width=True, height=390)
+            st.dataframe(df.drop(columns=["Input ID"]), use_container_width=True, height=330)
 
             stats_left, stats_mid, stats_right = st.columns(3)
             predictions = [item["prediction"] for item in history if item["prediction"]]

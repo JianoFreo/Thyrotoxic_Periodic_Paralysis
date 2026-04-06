@@ -89,6 +89,17 @@ class VitalsDAO:
             for row in rows
         ]
 
+    @staticmethod
+    def delete_vitals(input_id: str) -> bool:
+        """Delete a vitals row by input_id. Returns True when a row is deleted."""
+        conn = get_connection()
+        cur = conn.execute(
+            "DELETE FROM vitals_input WHERE input_id = ?",
+            (input_id,),
+        )
+        conn.commit()
+        return cur.rowcount > 0
+
 
 class PredictionDAO:
     @staticmethod
@@ -185,3 +196,14 @@ class PredictionDAO:
             )
             for row in rows
         ]
+
+    @staticmethod
+    def delete_prediction_by_input(input_id: str) -> int:
+        """Delete prediction rows for a given input_id. Returns deleted row count."""
+        conn = get_connection()
+        cur = conn.execute(
+            "DELETE FROM predictions WHERE input_id = ?",
+            (input_id,),
+        )
+        conn.commit()
+        return cur.rowcount

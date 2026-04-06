@@ -1,16 +1,15 @@
 """
 Streamlit UI tab: Analytics Dashboard
-
 Shows charts and summary stats.
 """
 
 import streamlit as st
 import pandas as pd
-
 from service import TPPService
 
 
 def render(user_id: str):
+    # ------------------ STYLES ------------------
     st.markdown(
         """
         <style>
@@ -19,42 +18,54 @@ def render(user_id: str):
                 border: 1px solid #2b3648;
                 border-radius: 16px;
                 padding: 1.2rem 1.4rem;
-                margin-bottom: 1rem;
+                height: 100%;
             }
+
             .tpp-kpi {
                 background: #171f2d;
                 border: 1px solid #2b3648;
                 border-radius: 14px;
                 padding: 0.8rem 1rem;
-                margin-bottom: 0.4rem;
             }
+
             .tpp-kpi-label {
                 color: #a3b1c9;
                 font-size: 0.95rem;
                 font-weight: 600;
             }
+
             .tpp-kpi-value {
                 color: #e7ecf5;
                 font-size: 2rem;
                 font-weight: 800;
-                line-height: 1.15;
             }
-            .tpp-risk-low {
-                border-left: 6px solid #4bb56a;
-            }
+
             .tpp-alert {
                 background: #123025;
                 border: 1px solid #25543f;
                 border-radius: 12px;
-                padding: 0.8rem 1rem;
+                padding: 1rem;
                 color: #d7f5df;
                 font-weight: 600;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                height: 100%;
+            }
+
+            .tpp-panel {
+                background: #171f2d;
+                border: 1px solid #2b3648;
+                border-radius: 14px;
+                padding: 1rem;
             }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
+    # ------------------ DATA ------------------
     history = TPPService.get_recent_history(user_id, limit=120)
 
     if not history:
@@ -79,49 +90,91 @@ def render(user_id: str):
     high_hr_events = sum(1 for hr in heart_rates if hr >= 110)
     records_processed = len(vitals_list)
 
-    st.markdown(
-        """
-        <div class="tpp-hero">
-            <div style="font-size:0.78rem; letter-spacing:0.16em; color:#7ea8ff; font-weight:700;">TPP SMARTWATCH MONITOR</div>
-            <div style="font-size:2.2rem; color:#e7ecf5; font-weight:800; margin-top:0.2rem;">Real-Time Thyrotoxic Risk Dashboard</div>
-            <div style="font-size:1.05rem; color:#afbdd2; margin-top:0.25rem;">Live physiological tracking with model-assisted risk forecasting for potential TPP attacks.</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    # ------------------ HERO + ALERT ------------------
+    hero_col, alert_col = st.columns([2, 1], gap="large")
 
+    with hero_col:
+        with st.container(border=True):
+            st.caption("TPP SMARTWATCH MONITOR")
+            st.markdown("## Real-Time Thyrotoxic Risk Dashboard")
+            st.write("Live physiological tracking with model-assisted risk forecasting for potential TPP attacks.")
+
+    with alert_col:
+        with st.container(border=True):
+            st.markdown("### Monitoring Status")
+            if latest_pred.severity_level in {"high", "critical"}:
+                st.warning("Risk escalation detected. Keep patient at rest and increase monitoring frequency immediately.")
+            elif latest_pred.severity_level == "moderate":
+                st.info("Moderate risk trend observed. Continue close observation and avoid exertion spikes.")
+            else:
+                st.success("Stable Monitoring Window\n\nNo urgent alert pattern detected.")
+
+    # ------------------ KPI ROW ------------------
     k1, k2, k3, k4 = st.columns(4)
+
     with k1:
         st.markdown(
-            f'<div class="tpp-kpi"><div class="tpp-kpi-label">Avg Heart Rate</div><div class="tpp-kpi-value">{avg_hr} bpm</div><div style="color:#98a7bf;">Current monitoring window</div></div>',
-            unsafe_allow_html=True,
-        )
-    with k2:
-        st.markdown(
-            f'<div class="tpp-kpi"><div class="tpp-kpi-label">Avg HRV</div><div class="tpp-kpi-value">{avg_hrv} ms</div><div style="color:#98a7bf;">Higher is generally more resilient</div></div>',
-            unsafe_allow_html=True,
-        )
-    with k3:
-        st.markdown(
-            f'<div class="tpp-kpi"><div class="tpp-kpi-label">High HR Events</div><div class="tpp-kpi-value">{high_hr_events}</div><div style="color:#98a7bf;">Heart rate >= 110 bpm</div></div>',
-            unsafe_allow_html=True,
-        )
-    with k4:
-        st.markdown(
-            f'<div class="tpp-kpi"><div class="tpp-kpi-label">Records Processed</div><div class="tpp-kpi-value">{records_processed}</div><div style="color:#98a7bf;">Loaded from backend</div></div>',
+            f"""
+            <div class="tpp-kpi">
+                <div class="tpp-kpi-label">Avg Heart Rate</div>
+                <div class="tpp-kpi-value">{avg_hr} bpm</div>
+                <div style="color:#98a7bf;">Current monitoring window</div>
+            </div>
+            """,
             unsafe_allow_html=True,
         )
 
+    with k2:
+        st.markdown(
+            f"""
+            <div class="tpp-kpi">
+                <div class="tpp-kpi-label">Avg HRV</div>
+                <div class="tpp-kpi-value">{avg_hrv} ms</div>
+                <div style="color:#98a7bf;">Higher is generally more resilient</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with k3:
+        st.markdown(
+            f"""
+            <div class="tpp-kpi">
+                <div class="tpp-kpi-label">High HR Events</div>
+                <div class="tpp-kpi-value">{high_hr_events}</div>
+                <div style="color:#98a7bf;">Heart rate ≥ 110 bpm</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with k4:
+        st.markdown(
+            f"""
+            <div class="tpp-kpi">
+                <div class="tpp-kpi-label">Records Processed</div>
+                <div class="tpp-kpi-value">{records_processed}</div>
+                <div style="color:#98a7bf;">Loaded from backend</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    # ------------------ LOWER SECTION ------------------
     left, right = st.columns([0.9, 1.4])
+
     with left:
         st.markdown("### Predicted TPP Risk")
         st.markdown(f"## {latest_pred.risk_score:.0%}")
+
         st.caption("Severity")
         st.markdown(f"### {latest_pred.severity_level.upper()}")
+
         st.caption("Timeline Window")
         st.markdown(f"### {latest_pred.predicted_timeline or 'N/A'}")
-        st.markdown(f"{latest_pred.recommendation}")
-        st.markdown("</div>", unsafe_allow_html=True)
+
+        st.markdown(latest_pred.recommendation)
+        st.divider()
 
     with right:
         chart_rows = []
@@ -134,25 +187,22 @@ def render(user_id: str):
                     "steps": v.steps or 0,
                 }
             )
+
         chart_df = pd.DataFrame(chart_rows).set_index("point")
 
         st.markdown('<div class="tpp-panel">', unsafe_allow_html=True)
-        st.markdown(f"### Time-Series Monitoring <span style='float:right; color:#98a7bf; font-size:1rem;'>Last {len(chart_df)} points</span>", unsafe_allow_html=True)
-        st.line_chart(chart_df, use_container_width=True)
-        st.caption(
-            f"Latest: heartRate={latest_vitals.heart_rate or 0}, hrv={latest_vitals.hrv or 0}, steps={latest_vitals.steps or 0}"
-        )
-        st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("### Alerts and Recommendations")
-    if latest_pred.severity_level in {"high", "critical"}:
-        st.warning("Risk escalation detected. Keep patient at rest and increase monitoring frequency immediately.")
-    elif latest_pred.severity_level == "moderate":
-        st.info("Moderate risk trend observed. Continue close observation and avoid exertion spikes.")
-    else:
         st.markdown(
-            '<div class="tpp-alert">Stable Monitoring Window<br><span style="font-weight:500; color:#8dc6ad;">No urgent alert pattern detected from the latest records.</span></div>',
+            f"### Time-Series Monitoring <span style='float:right; color:#98a7bf; font-size:1rem;'>Last {len(chart_df)} points</span>",
             unsafe_allow_html=True,
         )
 
-    st.markdown("</div>", unsafe_allow_html=True)
+        st.line_chart(chart_df, use_container_width=True)
+
+        st.caption(
+            f"Latest: heartRate={latest_vitals.heart_rate or 0}, "
+            f"hrv={latest_vitals.hrv or 0}, "
+            f"steps={latest_vitals.steps or 0}"
+        )
+
+        st.markdown("</div>", unsafe_allow_html=True)

@@ -147,3 +147,9 @@ class TPPService:
                 "prediction": pred,
             })
         return results
+
+    @staticmethod
+    def delete_history_record(input_id: str) -> bool:
+        """Delete a history record (prediction + vitals) for a given input_id."""
+        PredictionDAO.delete_prediction_by_input(input_id)
+        return VitalsDAO.delete_vitals(input_id)
