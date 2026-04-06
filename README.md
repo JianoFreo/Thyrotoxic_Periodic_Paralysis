@@ -2,26 +2,40 @@
 
 <img width="1089" height="870" alt="image" src="https://github.com/user-attachments/assets/8aabce52-7c9c-44b4-81d8-3db53a1a9643" />
 
-
 Full-stack AI and machine learning software for Thyrotoxic Periodic Paralysis (TPP) monitoring with smartwatch data ingestion. The platform tracks physiological behavior, predicts TPP attack risk and likely timeline windows, and provides recommendation support for preparedness and clinical follow-up.
 
-## Quick Start (Just Double-Click!)
+## Clean Architecture
 
-**Windows:**
-```
-Double-click start.bat
-```
+The repository is organized around a single ML workflow, a React dashboard, and a FastAPI service layer:
 
-**Or run in terminal:**
-```powershell
-.\start.bat
-```
+- `data/raw/` stores incoming smartwatch exports.
+- `data/processed/` stores cleaned data, training input, and prediction outputs.
+- `notebooks/exploration.ipynb` is the main notebook for analysis.
+- `src/data/` handles loading and preprocessing.
+- `src/features/` builds time-series features.
+- `src/models/` contains training and inference code.
+- `src/evaluation/` contains evaluation metrics.
+- `src/utils/` contains shared helpers.
+- `src/ingestion_api/` contains the FastAPI auth, ingest, predict, and user routes.
+- `configs/config.yaml` stores training and path settings.
+- `models/` stores the trained model artifact.
+- `tests/` contains unit tests.
+- `scripts/train.py` trains the model.
+- `scripts/predict.py` runs batch inference.
+- `frontend/` contains the React dashboard.
+- `backend/` is the Node data API used by the dashboard.
 
-This opens two windows (backend + frontend). Close them when done.
+Redundant docs, sample assets, and legacy frontend files were removed so the repository stays focused on the working pipeline.
 
-**URLs:**
-- Frontend: http://localhost:8080
-- Backend: http://localhost:3000
+## What the system does
+
+- Ingests smartwatch time-series data.
+- Cleans and normalizes the records.
+- Builds physiological features such as HRV, rolling averages, rate of change, circadian signals, activity, and sleep metrics.
+- Trains a baseline risk model.
+- Predicts TPP risk score, severity, and likely timeline window.
+- Serves authenticated ingest, prediction, and user endpoints through FastAPI.
+- Shows real-time metrics and risk trends in the dashboard.
 
 ## How To Use
 
@@ -43,9 +57,17 @@ npm run install:all
 
 The default training input file is:
 
-- data/processed/training_data.csv
+- `data/processed/training_data.csv`
 
-You can replace this file with your own processed smartwatch dataset.
+Your processed dataset should include at least:
+
+- `timestamp`
+- `user_id`
+- `heart_rate` or `bpm`
+- `steps`
+- `activity_intensity`
+- `sleep_duration_minutes`
+- `event_severity` for supervised training
 
 ### 3. Train the model
 
@@ -55,8 +77,8 @@ C:/Program Files/Python314/python.exe scripts/train.py --config configs/config.y
 
 Outputs:
 
-- models/trained_model.pkl
-- logs/training_metrics.json
+- `models/trained_model.pkl`
+- `logs/training_metrics.json`
 
 ### 4. Run batch prediction
 
@@ -66,7 +88,7 @@ C:/Program Files/Python314/python.exe scripts/predict.py --data data/processed/t
 
 Output:
 
-- data/processed/predictions.csv
+- `data/processed/predictions.csv`
 
 ### 5. Run tests
 
@@ -74,7 +96,7 @@ Output:
 C:/Program Files/Python314/python.exe -m pytest tests -q
 ```
 
-### 6. Run full app (frontend + Node backend)
+### 6. Run the dashboard and Node backend
 
 ```bash
 npm start
@@ -85,7 +107,7 @@ URLs:
 - Frontend dashboard: http://localhost:8080
 - Backend API: http://localhost:3000
 
-### 7. Optional: Run FastAPI API (ingestion and prediction)
+### 7. Run the FastAPI service
 
 ```powershell
 C:/Program Files/Python314/python.exe -m uvicorn src.ingestion_api.main:app --reload --port 8000
@@ -95,86 +117,72 @@ API docs:
 
 - http://localhost:8000/docs
 
----
+## FastAPI Endpoints
 
-## Docker Option (If You Have Docker Desktop Running)
+All routes are mounted under `/api/v1`.
 
-```bash
-docker-compose up
-```
+Authentication:
 
-[See DOCKER.md for details](DOCKER.md)
+- `POST /api/v1/auth/token`
 
----
+Users:
 
-## Manual Start (For Developers)
-```bash
-# Install dependencies
-npm run install:all
-npm install
+- `POST /api/v1/users`
+- `GET /api/v1/users`
+- `GET /api/v1/users/me`
+- `PATCH /api/v1/users/me`
 
-# Start both frontend and backend
-npm start
-```
+Ingestion:
 
-### Option 2: Using PowerShell script
-```powershell
-.\start.ps1
-```
+- `POST /api/v1/ingest`
+- `POST /api/v1/ingest/stream`
+- `POST /api/v1/ingest/batch`
 
-### Option 3: Manual start
-```bash
-# Terminal 1 - Backend
-cd backend
-npm install
-npm start
+Prediction:
 
-# Terminal 2 - Frontend
-cd frontend
-# Run React dashboard
-npm install
-npm run dev
-```
+- `POST /api/v1/predict`
+- `POST /api/v1/predict/realtime`
 
----
+## Data Flow
 
-## Project Structure
+1. Smartwatch or uploaded data lands in `data/raw/` or is sent to the API.
+2. `src/data/load_data.py` reads the source file.
+3. `src/data/preprocess.py` cleans and aligns the dataframe.
+4. `src/features/build_features.py` builds ML features.
+5. `src/models/train.py` trains the baseline model with a time-based split.
+6. `src/models/predict.py` loads the artifact and returns risk outputs.
+7. `frontend/` displays metrics, charts, and alerts.
 
-The repository is organized to support smartwatch ingestion, ML training, inference, and a separate web UI:
+## Model Outputs
 
-- `data/raw/` stores incoming smartwatch exports and untouched source data.
-- `data/processed/` stores cleaned, normalized, and feature-ready datasets.
-- `notebooks/` contains exploration and experimentation notebooks.
-- `notebooks/exploration.ipynb` is the primary notebook for data exploration.
-- `src/data/` handles loading, validation, and preprocessing of time-series health data.
-- `src/features/` builds physiological features such as rolling heart-rate statistics, sleep summaries, and activity windows.
-- `src/models/` contains the model definition, training pipeline, and inference helpers.
-- `src/evaluation/` holds metrics and validation utilities for risk/severity prediction.
-- `src/utils/` contains shared helpers used across the ML pipeline.
-- `configs/` stores YAML configuration for paths, model settings, and pipeline parameters.
-- `models/` stores serialized trained artifacts produced by the training pipeline.
-- `tests/` contains unit tests for data and model logic.
-- `scripts/` provides executable entry points for training and prediction jobs.
-- `backend/` is the API layer for ingestion and prediction endpoints.
-- `frontend/` is the separate dashboard UI for visualizing trends, risk scores, and alerts.
+The prediction pipeline returns:
 
-## ML Pipeline Architecture
+- risk score
+- severity level
+- predicted timeline window
+- class label
 
-The ML pipeline follows this cleaned structure:
+Severity mapping used by the current baseline:
 
-- `data/raw/`
-- `data/processed/`
-- `notebooks/exploration.ipynb`
-- `src/data/`
-- `src/features/`
-- `src/models/`
-- `src/evaluation/`
-- `src/utils/`
-- `configs/config.yaml`
-- `models/`
-- `tests/`
-- `scripts/train.py`
-- `scripts/predict.py`
+- `critical` if risk score is at least `0.85`
+- `high` if risk score is at least `0.65`
+- `moderate` if risk score is at least `0.35`
+- `low` otherwise
 
-Note: `models/trained_model.pkl` is generated by the training pipeline and should not be manually edited.
+Timeline mapping used by the current baseline:
 
+- `critical` -> `0-3 hours`
+- `high` -> `3-12 hours`
+- `moderate` -> `12-24 hours`
+- `low` -> `24-72 hours`
+
+## Files Generated By The Pipeline
+
+- `models/trained_model.pkl` is generated by training and should not be edited manually.
+- `logs/training_metrics.json` stores the run summary and validation metrics.
+- `data/processed/predictions.csv` stores batch inference output.
+
+## Notes
+
+- The current baseline model is classical ML on engineered features, which is a good starting point for small-to-medium wearable datasets.
+- If you want sequence models later, the same feature/data pipeline can be extended to LSTM, Temporal CNN, or Transformer models without changing the top-level structure.

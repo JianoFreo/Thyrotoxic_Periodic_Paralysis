@@ -9,7 +9,6 @@
     "install:all": "cd backend && npm install && cd ..\\frontend && npm install"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "live-server": "^1.2.2"
+    "concurrently": "^8.2.2"
   }
 }
