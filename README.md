@@ -100,13 +100,19 @@ Output:
 C:/Program Files/Python314/python.exe -m pip install -r requirements.txt
 ```
 
-4. Run the test suite:
+4. Run the actual system test. This starts the real backend process, sends a real upload request, and checks the persisted data:
+
+```powershell
+C:/Program Files/Python314/python.exe -m pytest tests/test_system_backend.py -q
+```
+
+5. If you also want the unit-level checks, run the full suite after that:
 
 ```powershell
 C:/Program Files/Python314/python.exe -m pytest tests -q
 ```
 
-5. Review the result. A successful run shows the tests passing with no failures.
+6. Review the result. A successful run shows the actual system test passing with no failures.
 
 ### 6. Run the dashboard and Node backend
 
@@ -153,6 +159,9 @@ This adds:
 ```powershell
 C:/Program Files/Python314/python.exe -m uvicorn src.ingestion_api.main:app --reload --port 8000
 ```
+
+The service uses local SQLite by default so it starts without an external database.
+Set `DATABASE_URL` if you want to point it at PostgreSQL or TimescaleDB instead.
 
 API docs:
 

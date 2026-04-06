@@ -10,6 +10,8 @@ const __dirname = path.dirname(__filename)
 
 const app = express()
 const PORT = process.env.PORT || 3000
+const DATA_DIR = path.resolve(process.env.DATA_DIR || path.join(__dirname, 'data'))
+const UPLOADS_DIR = path.resolve(process.env.UPLOADS_DIR || path.join(__dirname, 'uploads'))
 
 // Middleware
 app.use(cors())
@@ -23,11 +25,8 @@ const upload = multer({
 })
 
 // Ensure directories exist
-const dataDir = path.join(__dirname, 'data')
-const uploadsDir = path.join(__dirname, 'uploads')
-
-await fs.mkdir(dataDir, { recursive: true })
-await fs.mkdir(uploadsDir, { recursive: true })
+await fs.mkdir(DATA_DIR, { recursive: true })
+await fs.mkdir(UPLOADS_DIR, { recursive: true })
 
 // Routes
 app.get('/health', (req, res) => {
@@ -59,7 +58,7 @@ app.post('/api/ingest', upload.single('file'), async (req, res) => {
 
     // Save to data storage
     const timestamp = Date.now()
-    const dataFile = path.join(dataDir, `upload_${timestamp}.json`)
+    const dataFile = path.join(DATA_DIR, `upload_${timestamp}.json`)
     await fs.writeFile(dataFile, JSON.stringify(parsedData, null, 2))
 
     // Clean up temp upload
@@ -80,12 +79,12 @@ app.post('/api/ingest', upload.single('file'), async (req, res) => {
 
 app.get('/api/data', async (req, res) => {
   try {
-    const files = await fs.readdir(dataDir)
+    const files = await fs.readdir(DATA_DIR)
     const jsonFiles = files.filter(f => f.endsWith('.json'))
     
     const allData = []
     for (const file of jsonFiles) {
-      const content = await fs.readFile(path.join(dataDir, file), 'utf-8')
+      const content = await fs.readFile(path.join(DATA_DIR, file), 'utf-8')
       const data = JSON.parse(content)
       allData.push(...data)
     }
@@ -123,6 +122,6 @@ function parseCSV(content) {
 
 app.listen(PORT, () => {
   console.log(`🚀 TPP Backend running on http://localhost:${PORT}`)
-  console.log(`📁 Data directory: ${dataDir}`)
+  console.log(`📁 Data directory: ${DATA_DIR}`)
   console.log(`📤 Upload endpoint: POST http://localhost:${PORT}/api/ingest`)
 })

@@ -10,13 +10,11 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_access_token_expire_minutes: int = 60
 
-    # TimescaleDB (PostgreSQL) is recommended for production time-series workloads.
     database_url: str = Field(
-        default="postgresql+psycopg://postgres:postgres@localhost:5432/tpp",
+        default="sqlite:///./data/ingestion.db",
         alias="DATABASE_URL",
     )
 
-    # Fallback alignment when client does not provide a sampling interval.
     default_alignment_seconds: int = 60
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
