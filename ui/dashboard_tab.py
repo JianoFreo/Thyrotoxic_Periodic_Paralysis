@@ -14,12 +14,6 @@ def render(user_id: str):
     st.markdown(
         """
         <style>
-            .tpp-shell {
-                background: linear-gradient(180deg, #1a2130 0%, #111722 100%);
-                border-radius: 18px;
-                border: 1px solid #2b3648;
-                padding: 1.2rem 1.3rem;
-            }
             .tpp-hero {
                 background: #171f2d;
                 border: 1px solid #2b3648;
@@ -44,12 +38,6 @@ def render(user_id: str):
                 font-size: 2rem;
                 font-weight: 800;
                 line-height: 1.15;
-            }
-            .tpp-panel {
-                background: #171f2d;
-                border: 1px solid #2b3648;
-                border-radius: 14px;
-                padding: 1rem 1.1rem;
             }
             .tpp-risk-low {
                 border-left: 6px solid #4bb56a;
@@ -91,7 +79,6 @@ def render(user_id: str):
     high_hr_events = sum(1 for hr in heart_rates if hr >= 110)
     records_processed = len(vitals_list)
 
-    st.markdown('<div class="tpp-shell">', unsafe_allow_html=True)
     st.markdown(
         """
         <div class="tpp-hero">
@@ -127,7 +114,6 @@ def render(user_id: str):
 
     left, right = st.columns([0.9, 1.4])
     with left:
-        st.markdown('<div class="tpp-panel tpp-risk-low">', unsafe_allow_html=True)
         st.markdown("### Predicted TPP Risk")
         st.markdown(f"## {latest_pred.risk_score:.0%}")
         st.caption("Severity")
