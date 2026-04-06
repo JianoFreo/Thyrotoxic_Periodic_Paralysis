@@ -107,7 +107,27 @@ URLs:
 - Frontend dashboard: http://localhost:8080
 - Backend API: http://localhost:3000
 
-### 7. Run the FastAPI service
+### 7. Run everything with Docker
+
+If you want the backend, frontend, and notebook environment running at the same time, use Docker Compose:
+
+```bash
+docker-compose up --build
+```
+
+This starts:
+
+- backend API on http://localhost:3000
+- frontend dashboard on http://localhost:8080
+- Jupyter on http://localhost:8888
+
+To stop everything:
+
+```bash
+docker-compose down
+```
+
+### 8. Run the FastAPI service
 
 ```powershell
 C:/Program Files/Python314/python.exe -m uvicorn src.ingestion_api.main:app --reload --port 8000

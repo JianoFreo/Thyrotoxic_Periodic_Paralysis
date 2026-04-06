@@ -1,16 +1,17 @@
-# Frontend Dockerfile
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Install live-server globally
-RUN npm install -g live-server
+# Copy package files first for better layer caching
+COPY package*.json ./
 
-# Copy frontend files
+# Install dependencies
+RUN npm install
+
+# Copy application source
 COPY . .
 
-# Expose port
 EXPOSE 8080
 
-# Start live-server
-CMD ["live-server", "--host=0.0.0.0", "--port=8080", "--no-browser"]
+# Start Vite dev server bound to all interfaces
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

@@ -27,7 +27,6 @@ services:
       - "8888:8888"
     volumes:
       - ./notebooks:/home/jovyan/work/notebooks
-      - ./sample-data:/home/jovyan/work/sample-data
       - ./scripts:/home/jovyan/work/scripts
       - ./requirements.txt:/home/jovyan/work/requirements.txt
     command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
