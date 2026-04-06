@@ -112,9 +112,28 @@ C:/Program Files/Python314/python.exe -m pytest tests/test_system_backend.py -q
 C:/Program Files/Python314/python.exe -m pytest tests -q
 ```
 
-6. Review the result. A successful run shows the actual system test passing with no failures.
+6. Run frontend dashboard tests (no smartwatch hardware required). These tests mock wearable/API responses and validate real UI behavior:
+
+If Node is installed locally:
+
+```bash
+cd frontend
+npm run test
+```
+
+If Node is not available in your local PATH, run tests with Docker instead:
+
+```bash
+docker compose run --rm --no-deps frontend sh -lc "npm install; npm run test"
+```
+
+7. Review the result. A successful run shows all requested tests passing with no failures.
 
 ### 6. Run the dashboard and Node backend
+
+Use this when you want to run the actual frontend locally with live backend data.
+
+From the project root:
 
 ```bash
 npm start
@@ -125,29 +144,44 @@ URLs:
 - Frontend dashboard: http://localhost:8080
 - Backend API: http://localhost:3000
 
+Without a smartwatch connected, the frontend still runs normally and can be tested using uploaded/sample backend data plus mocked frontend tests.
+
 ### 7. Run the app with Docker
 
-The default Docker run starts only the backend and frontend, which keeps downloads much smaller:
+Use a single Docker Compose command to start frontend, backend, and database locally:
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 This starts:
 
 - backend API on http://localhost:3000
 - frontend dashboard on http://localhost:8080
+- PostgreSQL database on localhost:5432
+
+Default database credentials:
+
+- database: `tpp`
+- user: `tpp`
+- password: `tpp_dev_password`
 
 To stop everything:
 
 ```bash
-docker-compose down
+docker compose down
+```
+
+To run frontend mock tests while smartwatch hardware is unavailable:
+
+```bash
+docker compose run --rm --no-deps frontend sh -lc "npm install; npm run test"
 ```
 
 If you also want the notebook environment, run the optional profile:
 
 ```bash
-docker-compose --profile notebook up --build
+docker compose --profile notebook up --build
 ```
 
 This adds:

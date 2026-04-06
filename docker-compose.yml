@@ -1,4 +1,21 @@
 services:
+  database:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=tpp
+      - POSTGRES_USER=tpp
+      - POSTGRES_PASSWORD=tpp_dev_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tpp -d tpp"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
   backend:
     build: ./backend
     ports:
@@ -9,6 +26,10 @@ services:
       - ./backend/data:/app/data
     environment:
       - NODE_ENV=development
+      - DATABASE_URL=postgresql://tpp:tpp_dev_password@database:5432/tpp
+    depends_on:
+      database:
+        condition: service_healthy
     restart: unless-stopped
 
   frontend:
@@ -36,3 +57,6 @@ services:
       - ./requirements.txt:/home/jovyan/work/requirements.txt
     command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
     restart: unless-stopped
+
+volumes:
+  postgres_data:
