@@ -15,51 +15,51 @@ def render(user_id: str):
         """
         <style>
             .tpp-shell {
-                background: linear-gradient(180deg, #d7e9ff 0%, #eaf3ff 100%);
+                background: linear-gradient(180deg, #1a2130 0%, #111722 100%);
                 border-radius: 18px;
-                border: 1px solid #cadcf6;
+                border: 1px solid #2b3648;
                 padding: 1.2rem 1.3rem;
             }
             .tpp-hero {
-                background: #f7fbff;
-                border: 1px solid #d9e7fa;
+                background: #171f2d;
+                border: 1px solid #2b3648;
                 border-radius: 16px;
                 padding: 1.2rem 1.4rem;
                 margin-bottom: 1rem;
             }
             .tpp-kpi {
-                background: #f8fbff;
-                border: 1px solid #d8e6f9;
+                background: #171f2d;
+                border: 1px solid #2b3648;
                 border-radius: 14px;
                 padding: 0.8rem 1rem;
                 margin-bottom: 0.4rem;
             }
             .tpp-kpi-label {
-                color: #637389;
+                color: #a3b1c9;
                 font-size: 0.95rem;
                 font-weight: 600;
             }
             .tpp-kpi-value {
-                color: #1b2d42;
+                color: #e7ecf5;
                 font-size: 2rem;
                 font-weight: 800;
                 line-height: 1.15;
             }
             .tpp-panel {
-                background: #fbfdff;
-                border: 1px solid #dce8fa;
+                background: #171f2d;
+                border: 1px solid #2b3648;
                 border-radius: 14px;
                 padding: 1rem 1.1rem;
             }
             .tpp-risk-low {
-                border-left: 6px solid #2f9a4d;
+                border-left: 6px solid #4bb56a;
             }
             .tpp-alert {
-                background: #e9f6ea;
-                border: 1px solid #c7e8cb;
+                background: #123025;
+                border: 1px solid #25543f;
                 border-radius: 12px;
                 padding: 0.8rem 1rem;
-                color: #1f5130;
+                color: #d7f5df;
                 font-weight: 600;
             }
         </style>
@@ -95,9 +95,9 @@ def render(user_id: str):
     st.markdown(
         """
         <div class="tpp-hero">
-            <div style="font-size:0.78rem; letter-spacing:0.16em; color:#2b79d1; font-weight:700;">TPP SMARTWATCH MONITOR</div>
-            <div style="font-size:2.2rem; color:#162639; font-weight:800; margin-top:0.2rem;">Real-Time Thyrotoxic Risk Dashboard</div>
-            <div style="font-size:1.05rem; color:#58697d; margin-top:0.25rem;">Live physiological tracking with model-assisted risk forecasting for potential TPP attacks.</div>
+            <div style="font-size:0.78rem; letter-spacing:0.16em; color:#7ea8ff; font-weight:700;">TPP SMARTWATCH MONITOR</div>
+            <div style="font-size:2.2rem; color:#e7ecf5; font-weight:800; margin-top:0.2rem;">Real-Time Thyrotoxic Risk Dashboard</div>
+            <div style="font-size:1.05rem; color:#afbdd2; margin-top:0.25rem;">Live physiological tracking with model-assisted risk forecasting for potential TPP attacks.</div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -106,22 +106,22 @@ def render(user_id: str):
     k1, k2, k3, k4 = st.columns(4)
     with k1:
         st.markdown(
-            f'<div class="tpp-kpi"><div class="tpp-kpi-label">Avg Heart Rate</div><div class="tpp-kpi-value">{avg_hr} bpm</div><div style="color:#7a8ca1;">Current monitoring window</div></div>',
+            f'<div class="tpp-kpi"><div class="tpp-kpi-label">Avg Heart Rate</div><div class="tpp-kpi-value">{avg_hr} bpm</div><div style="color:#98a7bf;">Current monitoring window</div></div>',
             unsafe_allow_html=True,
         )
     with k2:
         st.markdown(
-            f'<div class="tpp-kpi"><div class="tpp-kpi-label">Avg HRV</div><div class="tpp-kpi-value">{avg_hrv} ms</div><div style="color:#7a8ca1;">Higher is generally more resilient</div></div>',
+            f'<div class="tpp-kpi"><div class="tpp-kpi-label">Avg HRV</div><div class="tpp-kpi-value">{avg_hrv} ms</div><div style="color:#98a7bf;">Higher is generally more resilient</div></div>',
             unsafe_allow_html=True,
         )
     with k3:
         st.markdown(
-            f'<div class="tpp-kpi"><div class="tpp-kpi-label">High HR Events</div><div class="tpp-kpi-value">{high_hr_events}</div><div style="color:#7a8ca1;">Heart rate >= 110 bpm</div></div>',
+            f'<div class="tpp-kpi"><div class="tpp-kpi-label">High HR Events</div><div class="tpp-kpi-value">{high_hr_events}</div><div style="color:#98a7bf;">Heart rate >= 110 bpm</div></div>',
             unsafe_allow_html=True,
         )
     with k4:
         st.markdown(
-            f'<div class="tpp-kpi"><div class="tpp-kpi-label">Records Processed</div><div class="tpp-kpi-value">{records_processed}</div><div style="color:#7a8ca1;">Loaded from backend</div></div>',
+            f'<div class="tpp-kpi"><div class="tpp-kpi-label">Records Processed</div><div class="tpp-kpi-value">{records_processed}</div><div style="color:#98a7bf;">Loaded from backend</div></div>',
             unsafe_allow_html=True,
         )
 
@@ -151,7 +151,7 @@ def render(user_id: str):
         chart_df = pd.DataFrame(chart_rows).set_index("point")
 
         st.markdown('<div class="tpp-panel">', unsafe_allow_html=True)
-        st.markdown(f"### Time-Series Monitoring <span style='float:right; color:#7a8ca1; font-size:1rem;'>Last {len(chart_df)} points</span>", unsafe_allow_html=True)
+        st.markdown(f"### Time-Series Monitoring <span style='float:right; color:#98a7bf; font-size:1rem;'>Last {len(chart_df)} points</span>", unsafe_allow_html=True)
         st.line_chart(chart_df, use_container_width=True)
         st.caption(
             f"Latest: heartRate={latest_vitals.heart_rate or 0}, hrv={latest_vitals.hrv or 0}, steps={latest_vitals.steps or 0}"
@@ -165,7 +165,7 @@ def render(user_id: str):
         st.info("Moderate risk trend observed. Continue close observation and avoid exertion spikes.")
     else:
         st.markdown(
-            '<div class="tpp-alert">Stable Monitoring Window<br><span style="font-weight:500; color:#466957;">No urgent alert pattern detected from the latest records.</span></div>',
+            '<div class="tpp-alert">Stable Monitoring Window<br><span style="font-weight:500; color:#8dc6ad;">No urgent alert pattern detected from the latest records.</span></div>',
             unsafe_allow_html=True,
         )
 

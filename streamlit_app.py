@@ -24,6 +24,62 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+st.markdown(
+    """
+    <style>
+        .stApp {
+            background: radial-gradient(circle at 20% 0%, #232834 0%, #141824 45%, #0f131d 100%);
+            color: #e7ecf5;
+        }
+        [data-testid="stHeader"] {
+            background: transparent;
+        }
+        [data-testid="stSidebar"] {
+            background: linear-gradient(180deg, #121722 0%, #0b1018 100%);
+            border-right: 1px solid #2a3140;
+        }
+        h1, h2, h3, h4, h5, h6, p, label, .stCaption {
+            color: #e7ecf5 !important;
+        }
+        [data-testid="stMetric"] {
+            background: #171d2a;
+            border: 1px solid #2e3748;
+            border-radius: 12px;
+            padding: 0.3rem 0.6rem;
+        }
+        [data-testid="stDataFrame"] {
+            border: 1px solid #2e3748;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .stButton > button {
+            background: #2a6bf5;
+            color: #ffffff;
+            border: 1px solid #5f8fff;
+            border-radius: 10px;
+        }
+        .stButton > button:hover {
+            background: #3c79f6;
+            border-color: #7ca3ff;
+        }
+        .stNumberInput input,
+        .stTextInput input,
+        [data-baseweb="select"] > div,
+        [data-baseweb="input"] > div {
+            background: #0f1522 !important;
+            color: #e7ecf5 !important;
+            border-color: #2c3747 !important;
+        }
+        .main .block-container {
+            padding-top: 1rem;
+            padding-bottom: 0.7rem;
+            max-height: 100vh;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 
 # ── One-time database initialisation ─────────────────────────────────
 @st.cache_resource
@@ -45,27 +101,23 @@ with st.sidebar:
     st.markdown(
         """
         **How to use:**
-        1. Enter vitals in the **Vitals Input** tab
-        2. View predictions in **History**
+        1. Enter vitals in **Live Console**
+        2. Review predictions in the right-side history panel
         3. See trends in **Dashboard**
         """
     )
 
 
 # ── Main tabbed interface ────────────────────────────────────────────
-tab1, tab2, tab3 = st.tabs([
-    "Vitals Input",
-    "Prediction History",
+tab1, tab2 = st.tabs([
+    "Live Console",
     "Dashboard",
 ])
 
-from ui.vitals_input_tab import render as render_vitals
-from ui.history_tab import render as render_history
+from ui.live_console_tab import render as render_live_console
 from ui.dashboard_tab import render as render_dashboard
 
 with tab1:
-    render_vitals(st.session_state.get("user_id", "user-demo"))
+    render_live_console(st.session_state.get("user_id", "user-demo"))
 with tab2:
-    render_history(st.session_state.get("user_id", "user-demo"))
-with tab3:
     render_dashboard(st.session_state.get("user_id", "user-demo"))
