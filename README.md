@@ -10,7 +10,7 @@
 
 
 # MANUAL INPUT FOR TESTING
-![alt text](image.png)
+<img width="1611" height="632" alt="image" src="https://github.com/user-attachments/assets/436276e8-2667-42e6-adfe-9b0c35ecaaf5" />
 ![alt text](image-1.png)
 
 ## Architecture
