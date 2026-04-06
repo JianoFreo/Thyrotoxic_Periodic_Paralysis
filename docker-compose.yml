@@ -17,12 +17,17 @@ services:
       - "8080:8080"
     volumes:
       - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_TARGET=http://backend:3000
     depends_on:
       - backend
     restart: unless-stopped
 
   jupyter:
     image: jupyter/scipy-notebook:latest
+    profiles:
+      - notebook
     ports:
       - "8888:8888"
     volumes:

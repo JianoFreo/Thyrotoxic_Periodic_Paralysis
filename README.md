@@ -1,6 +1,6 @@
 # TPP Hyphertyrodism AI Data System
 
-<img width="1089" height="870" alt="image" src="https://github.com/user-attachments/assets/8aabce52-7c9c-44b4-81d8-3db53a1a9643" />
+![alt text](image.png)
 
 Full-stack AI and machine learning software for Thyrotoxic Periodic Paralysis (TPP) monitoring with smartwatch data ingestion. The platform tracks physiological behavior, predicts TPP attack risk and likely timeline windows, and provides recommendation support for preparedness and clinical follow-up.
 
@@ -107,9 +107,9 @@ URLs:
 - Frontend dashboard: http://localhost:8080
 - Backend API: http://localhost:3000
 
-### 7. Run everything with Docker
+### 7. Run the app with Docker
 
-If you want the backend, frontend, and notebook environment running at the same time, use Docker Compose:
+The default Docker run starts only the backend and frontend, which keeps downloads much smaller:
 
 ```bash
 docker-compose up --build
@@ -119,13 +119,22 @@ This starts:
 
 - backend API on http://localhost:3000
 - frontend dashboard on http://localhost:8080
-- Jupyter on http://localhost:8888
 
 To stop everything:
 
 ```bash
 docker-compose down
 ```
+
+If you also want the notebook environment, run the optional profile:
+
+```bash
+docker-compose --profile notebook up --build
+```
+
+This adds:
+
+- Jupyter on http://localhost:8888
 
 ### 8. Run the FastAPI service
 
