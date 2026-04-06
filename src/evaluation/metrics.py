@@ -43,9 +43,16 @@ def evaluate_predictions(
         proba_arr = np.asarray(y_proba)
         pos_proba = proba_arr[:, 1] if proba_arr.ndim == 2 else proba_arr
 
-        metrics["log_loss"] = float(log_loss(y_true_arr, proba_arr))
+        # Keep metrics stable for edge cases where the validation window has one class.
+        metrics["log_loss"] = float(log_loss(y_true_arr, proba_arr, labels=[0, 1]))
         metrics["brier_score"] = float(brier_score_loss(y_true_arr, pos_proba))
-        metrics["roc_auc"] = float(roc_auc_score(y_true_arr, pos_proba))
-        metrics["pr_auc"] = float(average_precision_score(y_true_arr, pos_proba))
+
+        unique_classes = np.unique(y_true_arr)
+        if unique_classes.size > 1:
+            metrics["roc_auc"] = float(roc_auc_score(y_true_arr, pos_proba))
+            metrics["pr_auc"] = float(average_precision_score(y_true_arr, pos_proba))
+        else:
+            metrics["roc_auc"] = 0.5
+            metrics["pr_auc"] = float(unique_classes[0])
 
     return metrics
