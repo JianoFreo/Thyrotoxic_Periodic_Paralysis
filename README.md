@@ -92,9 +92,21 @@ Output:
 
 ### 5. Run tests
 
+1. Open a terminal in the repository root: `c:\Users\User\OneDrive\Desktop\Thyrotoxic_Periodic_Paralysis`.
+2. Activate your Python environment if you are not already using it.
+3. Make sure the test dependencies are installed:
+
+```powershell
+C:/Program Files/Python314/python.exe -m pip install -r requirements.txt
+```
+
+4. Run the test suite:
+
 ```powershell
 C:/Program Files/Python314/python.exe -m pytest tests -q
 ```
+
+5. Review the result. A successful run shows the tests passing with no failures.
 
 ### 6. Run the dashboard and Node backend
 
