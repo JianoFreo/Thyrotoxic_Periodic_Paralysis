@@ -144,13 +144,25 @@ URLs:
 - Frontend dashboard: http://localhost:8080
 - Backend API: http://localhost:3000
 
-Without a smartwatch connected, the frontend still runs normally and can be tested using uploaded/sample backend data plus mocked frontend tests.
+Without a smartwatch connected, use the built-in dashboard mock mode:
+
+1. Open the dashboard at `http://localhost:8080`.
+2. Click `Use Mock Feed` in the Data Source panel.
+3. Click `Inject Risk Spike` to simulate a high-risk episode and verify alert/risk UI updates.
+4. Click `Switch to Live` to return to backend-fed data.
 
 ### 7. Run the app with Docker
 
 Use a single Docker Compose command to start frontend, backend, and database locally:
 
 ```bash
+docker compose up --build
+```
+
+If Docker Hub times out while pulling PostgreSQL (for example, TLS handshake timeout), use a mirror image and run the same compose command:
+
+```powershell
+$env:POSTGRES_IMAGE="public.ecr.aws/docker/library/postgres:15-alpine"
 docker compose up --build
 ```
 

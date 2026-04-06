@@ -46,13 +46,75 @@ const recommendationFromSeverity = (severity) => {
   return 'Low risk currently. Keep routine monitoring and maintain medication adherence.'
 }
 
+const randomBetween = (min, max) => min + Math.random() * (max - min)
+
+const createMockRecord = (timestamp, prev) => {
+  const baselineHeartRate = prev ? toNum(prev.heart_rate ?? prev.heartRate, 84) : 84
+  const baselineHrv = prev ? toNum(prev.hrv, 38) : 38
+
+  const heartRate = Math.max(58, Math.round(baselineHeartRate + randomBetween(-6, 7)))
+  const hrv = Math.max(12, Math.round(baselineHrv + randomBetween(-3, 3)))
+  const steps = Math.max(0, Math.round(randomBetween(0, 70)))
+
+  return {
+    user_id: 'mock-user-1',
+    timestamp,
+    heart_rate: heartRate,
+    hrv,
+    steps,
+  }
+}
+
+const createMockDataset = (count = 80) => {
+  const now = Date.now()
+  const out = []
+  for (let i = 0; i < count; i += 1) {
+    const timestamp = new Date(now - (count - i) * 60_000).toISOString()
+    const previous = out.length > 0 ? out[out.length - 1] : null
+    out.push(createMockRecord(timestamp, previous))
+  }
+  return out
+}
+
+const appendMockPoint = (records) => {
+  const previous = records.length > 0 ? records[records.length - 1] : null
+  const next = createMockRecord(new Date().toISOString(), previous)
+  return [...records.slice(-119), next]
+}
+
+const buildFallbackPrediction = (records) => {
+  if (!records.length) return null
+  const latest = records[records.length - 1]
+  const riskScore = computeRiskFallback(latest)
+  const severityLevel = severityFromScore(riskScore)
+  return {
+    risk_score: riskScore,
+    severity_level: severityLevel,
+    predicted_timeline_window: timelineFromSeverity(severityLevel),
+    recommendation: recommendationFromSeverity(severityLevel),
+    source: 'fallback',
+  }
+}
+
 export function useDashboardData(pollIntervalMs = 10000) {
   const [records, setRecords] = useState([])
   const [prediction, setPrediction] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [dataMode, setDataMode] = useState('live')
 
   const loadData = useCallback(async () => {
+    if (dataMode === 'mock') {
+      setError('')
+      setLoading(false)
+      setRecords((prev) => {
+        const nextRecords = prev.length > 0 ? appendMockPoint(prev) : createMockDataset()
+        setPrediction(buildFallbackPrediction(nextRecords))
+        return nextRecords
+      })
+      return
+    }
+
     try {
       setError('')
       const data = await fetchWearableRecords()
@@ -64,16 +126,7 @@ export function useDashboardData(pollIntervalMs = 10000) {
           const remotePrediction = await fetchPrediction(recent)
           setPrediction(remotePrediction)
         } catch {
-          const latest = recent[recent.length - 1]
-          const riskScore = computeRiskFallback(latest)
-          const severityLevel = severityFromScore(riskScore)
-          setPrediction({
-            risk_score: riskScore,
-            severity_level: severityLevel,
-            predicted_timeline_window: timelineFromSeverity(severityLevel),
-            recommendation: recommendationFromSeverity(severityLevel),
-            source: 'fallback',
-          })
+          setPrediction(buildFallbackPrediction(recent))
         }
       } else {
         setPrediction(null)
@@ -83,13 +136,46 @@ export function useDashboardData(pollIntervalMs = 10000) {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [dataMode])
 
   useEffect(() => {
     loadData()
     const id = setInterval(loadData, pollIntervalMs)
     return () => clearInterval(id)
   }, [loadData, pollIntervalMs])
+
+  const enableMockMode = useCallback(() => {
+    const initial = createMockDataset()
+    setDataMode('mock')
+    setError('')
+    setLoading(false)
+    setRecords(initial)
+    setPrediction(buildFallbackPrediction(initial))
+  }, [])
+
+  const enableLiveMode = useCallback(() => {
+    setDataMode('live')
+    setLoading(true)
+    setError('')
+  }, [])
+
+  const injectMockSpike = useCallback(() => {
+    if (dataMode !== 'mock') return
+
+    setRecords((prev) => {
+      const baseline = prev.length > 0 ? prev : createMockDataset()
+      const spike = {
+        user_id: 'mock-user-1',
+        timestamp: new Date().toISOString(),
+        heart_rate: Math.round(randomBetween(138, 156)),
+        hrv: Math.round(randomBetween(14, 21)),
+        steps: Math.round(randomBetween(0, 9)),
+      }
+      const nextRecords = [...baseline.slice(-119), spike]
+      setPrediction(buildFallbackPrediction(nextRecords))
+      return nextRecords
+    })
+  }, [dataMode])
 
   const metrics = useMemo(() => {
     if (records.length === 0) {
@@ -177,11 +263,16 @@ export function useDashboardData(pollIntervalMs = 10000) {
   return {
     loading,
     error,
+    dataMode,
+    isMockMode: dataMode === 'mock',
     records,
     metrics,
     chartData,
     prediction,
     alerts,
     refresh: loadData,
+    enableMockMode,
+    enableLiveMode,
+    injectMockSpike,
   }
 }

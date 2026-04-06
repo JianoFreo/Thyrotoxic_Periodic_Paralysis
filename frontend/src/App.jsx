@@ -5,7 +5,19 @@ import TimeSeriesCharts from './components/TimeSeriesCharts'
 import { useDashboardData } from './hooks/useDashboardData'
 
 export default function App() {
-  const { loading, error, metrics, chartData, prediction, alerts, refresh } = useDashboardData()
+  const {
+    loading,
+    error,
+    metrics,
+    chartData,
+    prediction,
+    alerts,
+    refresh,
+    isMockMode,
+    enableMockMode,
+    enableLiveMode,
+    injectMockSpike,
+  } = useDashboardData()
 
   return (
     <main className="dashboard-shell">
@@ -21,6 +33,29 @@ export default function App() {
           Refresh Data
         </button>
       </header>
+
+      <section className="mode-controls">
+        <div className="mode-state">
+          Data Source:
+          <strong>{isMockMode ? ' Mock Feed' : ' Live Backend'}</strong>
+        </div>
+        <div className="mode-actions">
+          {isMockMode ? (
+            <>
+              <button className="mode-btn" onClick={injectMockSpike} type="button">
+                Inject Risk Spike
+              </button>
+              <button className="mode-btn secondary" onClick={enableLiveMode} type="button">
+                Switch to Live
+              </button>
+            </>
+          ) : (
+            <button className="mode-btn" onClick={enableMockMode} type="button">
+              Use Mock Feed
+            </button>
+          )}
+        </div>
+      </section>
 
       {error ? <p className="error-banner">{error}</p> : null}
       {loading ? <p className="loading">Loading monitoring feed...</p> : null}
