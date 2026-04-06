@@ -54,12 +54,6 @@ def render(user_id: str):
                 height: 100%;
             }
 
-            .tpp-panel {
-                background: #171f2d;
-                border: 1px solid #2b3648;
-                border-radius: 14px;
-                padding: 1rem;
-            }
         </style>
         """,
         unsafe_allow_html=True,
@@ -174,7 +168,6 @@ def render(user_id: str):
         st.markdown(f"### {latest_pred.predicted_timeline or 'N/A'}")
 
         st.markdown(latest_pred.recommendation)
-        st.divider()
 
     with right:
         chart_rows = []
@@ -189,8 +182,6 @@ def render(user_id: str):
             )
 
         chart_df = pd.DataFrame(chart_rows).set_index("point")
-
-        st.markdown('<div class="tpp-panel">', unsafe_allow_html=True)
 
         st.markdown(
             f"### Time-Series Monitoring <span style='float:right; color:#98a7bf; font-size:1rem;'>Last {len(chart_df)} points</span>",
