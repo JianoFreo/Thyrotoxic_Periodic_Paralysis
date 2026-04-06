@@ -13,3 +13,4 @@ uvicorn
 sqlalchemy
 psycopg[binary]
 pydantic-settings
+pyyaml
