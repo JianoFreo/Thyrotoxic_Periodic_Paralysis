@@ -13,7 +13,10 @@ Full-stack AI deeplearning software for Thyrotoxic Periodic Paralysis monitoring
 
 # MANUAL INPUT FOR TESTING
 ![alt text](assests/image.png)
-![alt text](assests/image-1.png)
+
+<p align="center">
+  <img src="assests/image-1.png" width="500"/>
+</p>
 
 ## Architecture
 
