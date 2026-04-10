@@ -1,7 +1,6 @@
 """
-TPP Prediction Service — business logic layer.
-
-Orchestrates vitals ingestion, model inference, and prediction persistence.
+logic layer na.
+yung mga predictions and analysis.
 """
 
 import time

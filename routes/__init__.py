@@ -1,12 +1,3 @@
-"""
-Flask API routes for TPP prediction service.
-
-Endpoints:
-  POST /predict       - synchronous prediction from vitals
-  GET  /history       - retrieve user prediction history
-  GET  /health        - service health check
-"""
-
 from flask import Blueprint, request, jsonify
 
 from model import VitalsInput

@@ -1,9 +1,3 @@
-"""
-Data models for TPP monitoring system.
-
-Provides POJO-like classes for vitals input and predictions (similar to Java reference).
-"""
-
 from dataclasses import dataclass
 from typing import Optional
 
