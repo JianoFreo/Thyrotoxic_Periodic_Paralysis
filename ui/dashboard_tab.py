@@ -1,8 +1,3 @@
-"""
-Streamlit UI tab: Analytics Dashboard
-Shows charts and summary stats.
-"""
-
 import streamlit as st
 import pandas as pd
 from service import TPPService

@@ -1,7 +1,5 @@
 """
-Streamlit UI tab: Prediction History
-
-Displays recent predictions and vitals.
+dinagdagan ko ng delete and manag function para di na need imanipulate yung db for testing
 """
 
 import streamlit as st

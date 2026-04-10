@@ -1,9 +1,3 @@
-"""
-Streamlit UI tab: Live Console
-
-Combines manual vitals input and prediction history in one compact, side-by-side view.
-"""
-
 import pandas as pd
 import streamlit as st
 

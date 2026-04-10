@@ -1,8 +1,6 @@
 """
-Streamlit UI tab: Vitals Input Form
-
-Allows manual entry of physiological metrics or file upload.
-Generates predictions on submit.
+vitals input lang para rin sa file upload eme eme
+tsaka para sa manual input for testingz
 """
 
 import streamlit as st
