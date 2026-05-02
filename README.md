@@ -1,6 +1,6 @@
 # TPP Monitoring Service 
 
-Full-stack AI deeplearning software for Thyrotoxic Periodic Paralysis monitoring with smartwatch data ingestion. This is to monitor the behavior of your body that predicts the severity and timeline of TPP attacks. It also advises you when to take your Propranolol and Thiamazole tablets and how you would prepare for the attack. It was initially designed for me as I suffered from sa same condition back in early 2024 but as of 2025, I already fully recovered so I didn't get to use it LMAO, still working on it tho.
+Full-stack AI deeplearning software for Thyrotoxic Periodic Paralysis monitoring with smartwatch data ingestion. This is to monitor the behavior of your body that predicts the severity and timeline of TPP attacks. It also advises you when to take your Propranolol and Thiamazole tablets and how you would prepare for the attack. 
 
 ![alt text](<assests/Screenshot 2026-04-07 002954.png>)
 
