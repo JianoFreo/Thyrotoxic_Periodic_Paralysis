@@ -12,6 +12,8 @@ Full-stack AI deeplearning software for Thyrotoxic Periodic Paralysis monitoring
 
 
 # MANUAL INPUT FOR TESTING
+<img width="713" height="550" alt="image" src="https://github.com/user-attachments/assets/fd6acc9b-1af5-4eaf-916c-397ed2628643" />
+
 ![alt text](assests/image.png)
 
 <p align="center">
@@ -30,6 +32,9 @@ ui/       -> Streamlit tabs (interactive frontend)
 app.py    -> Flask app entrypoint
 streamlit_app.py -> Streamlit app entrypoint
 ```
+## Machine Learning Model
+The risk prediction engine is built around a trained machine learning artifact (trained_model.pkl) serialized using Python's joblib/pickle protocol. The model is a supervised classifier trained on physiological feature vectors labeled with TPP attack risk levels. Four risk categories are defined: Low, Moderate, High, and Critical, corresponding to risk score ranges of 0–25%, 26–50%, 51–75%, and 76–100% respectively.
+<img width="639" height="373" alt="image" src="https://github.com/user-attachments/assets/2e82df7e-5226-4db5-8938-021ee21ce61e" />
 
 ## Run With Docker Compose (single command)
 
@@ -63,6 +68,16 @@ Use the **Vitals Input** tab to:
 4. Review results in **Prediction History** and **Dashboard** tabs
 
 This gives you fully interactive mock testing while smartwatch hardware is unavailable.
+| Component                 | Technology               | Status      | Lines of Code |
+|--------------------------|--------------------------|-------------|---------------|
+| Flask REST API (app.py)  | Python / Flask           | Operational | ~46           |
+| Streamlit Dashboard      | Python / Streamlit       | Operational | ~123          |
+| DAO Layer                | Python / SQLite          | Operational | ~85           |
+| Service Layer            | Python / Scikit-learn    | Operational | ~110          |
+| Model Layer              | Python dataclasses       | Operational | ~40           |
+| Routes Layer             | Flask Blueprints         | Operational | ~60           |
+| UI Tabs (live_console, dashboard) | Streamlit components | Operational | ~180          |
+| Visualization Notebook   | Jupyter / matplotlib     | Operational | 793 lines     |
 
 ## API Endpoints
 
