@@ -22,6 +22,9 @@ Full-stack AI deeplearning software for Thyrotoxic Periodic Paralysis monitoring
 
 ## Architecture
 
+<img width="688" height="534" alt="image" src="https://github.com/user-attachments/assets/dca54fc0-aaea-4edb-9c23-2908af9d7675" />
+
+
 ```
 config/   -> DB connection / infrastructure
 model/    -> Data classes (VitalsInput, Prediction)
